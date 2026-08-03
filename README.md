@@ -4,7 +4,7 @@ This repository contains a deliberately scoped, native SwiftUI implementation of
 
 ## Status
 
-Milestone 1 is complete: the target screen, architecture boundary, schema contract, fixture plan, and AI working context are documented. No SwiftUI implementation or Xcode project has been created yet.
+Milestone 2 is complete: the target screen, architecture boundary, schema contract, fixture plan, and native iOS project foundation are in place. The application has a safe root state, but no SDUI page renderer or payload has been implemented yet.
 
 ## Source of truth
 
@@ -38,9 +38,10 @@ The implementation intentionally excludes live APIs, authentication, search, pro
 - Documentation/ARCHITECTURE.md - system boundaries and engineering decisions.
 - Documentation/SDUI_SCHEMA_V1.md - proposed contract and compatibility policy.
 - Documentation/FIXTURE_PLAN.md - planned deterministic payloads and demo cases.
+- Documentation/PROJECT_FOUNDATION.md - Xcode target, language, and launch-mode decisions.
 - Documentation/AI_CONTEXT.md - constraints governing AI-assisted work.
 - AI_WORKFLOW.md - contemporaneous AI evidence log and verification strategy.
 
 ## Milestone policy
 
-Each milestone is reviewed before the next begins. The next milestone may create the Xcode project and the smallest production-ready project foundation, but will not begin page rendering until its boundary is approved.
+Each milestone is reviewed before the next begins. The next milestone may define the typed wire contract and deterministic JSON fixtures, but will not begin page rendering until its boundary is approved.

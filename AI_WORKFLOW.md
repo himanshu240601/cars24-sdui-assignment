@@ -31,9 +31,23 @@ Why rejected: those approaches either add screenshot-only features, dilute the S
 
 Verification: compare every decision with the written brief, inspect the reference screenshots separately from the functional scope, and use official Apple guidance for HIG/accessibility recommendations.
 
+### Record 2 - native project foundation
+
+Prompt intent: create only the native Xcode foundation after Milestone 2 approval; do not add the SDUI contract, fixture, renderer, or assignment UI.
+
+Outcome: a buildable iPhone-only SwiftUI application was created with iOS 17.0, Swift 6, no third-party dependencies, a safe root state, unit/UI test targets, and an argument-selectable future static-baseline seam.
+
+Rejected output or approach: hand-writing the Xcode project file, adding a dependency-injection or state-management framework, or putting a temporary hard-coded home screen in the root view.
+
+Why rejected: the native Xcode template is less error-prone; external frameworks do not solve a current assignment requirement; and a fake home screen would blur the approved boundary before the SDUI contract exists.
+
+AI failure caught: the first implementation allowed the pure `AppLaunchMode` value to inherit the target's default `MainActor` isolation. Swift 6 then rejected synchronous unit-test access to that value.
+
+Correction and verification: declare the pure launch-mode type `nonisolated`, preserving main-actor isolation for SwiftUI while keeping argument parsing independently testable. `xcodebuild test` passed on an iPhone 16 simulator after the correction.
+
 ## Future records
 
-Records 2 and 3, plus one genuine AI failure and its detection method, will be added only after they occur during later approved milestones.
+Record 3 and later entries will be added only after they occur during approved milestones.
 
 ## Verification strategy for AI-assisted changes
 
