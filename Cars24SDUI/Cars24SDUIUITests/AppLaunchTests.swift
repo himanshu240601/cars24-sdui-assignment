@@ -9,8 +9,17 @@ import XCTest
 
 final class AppLaunchTests: XCTestCase {
     @MainActor
-    func testAppShowsItsSafeRootWhileNoScreenIsConfigured() {
+    func testAppLoadsItsDefinitionBeforeTheRendererExists() {
         let app = XCUIApplication()
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["Screen definition loaded"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
+    func testStaticBaselineDoesNotLoadTheSDUIFixture() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-static-baseline"]
         app.launch()
 
         XCTAssertTrue(app.staticTexts["Screen unavailable"].waitForExistence(timeout: 5))

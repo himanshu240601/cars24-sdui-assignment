@@ -17,7 +17,7 @@
 
 ## Foundation behaviour
 
-The app currently displays a native, accessible unavailable-content state. This is a safe placeholder while the renderer does not yet exist.
+The default SDUI launch path now reads the bundled V1 fixture through a typed repository and main-actor screen store. Until the renderer exists, it presents native loading, compatibility, and retryable-error states plus a neutral “screen definition loaded” host state.
 
 The application accepts the launch argument -static-baseline. It selects the future static comparison variant; without it, the future SDUI variant is the default. The switch is a developer and benchmark harness, not a user-facing setting.
 
@@ -32,8 +32,7 @@ The application accepts the launch argument -static-baseline. It selects the fut
 
 ## Deferred work
 
-- SDUI models, decoding, validation, registry, payload resources, and renderer.
-- Design tokens and reusable visual components.
+- Native SDUI renderer, design tokens, and reusable visual components.
 - Static baseline composition.
 - Assignment UI and its JSON-defined finance interaction.
 - Performance instrumentation and release benchmark scenarios.

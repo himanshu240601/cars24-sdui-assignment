@@ -57,6 +57,18 @@ Why rejected: direct tagged-enum decoding makes an unknown future component fail
 
 Verification: ten deterministic decoder tests cover the primary fixture, unknown component, invalid known component, incompatible major version, duplicate root IDs, malformed data, tolerated unknown fields/actions, malformed action shapes, complete action vocabulary, and a missing finance reference. The suite also retains two foundation unit tests and one UI launch test. A simulator build confirmed each JSON fixture is copied into the app bundle.
 
+### Record 4 - local repository and screen-load state
+
+Prompt intent: after Milestone 4 approval, introduce only the asynchronous bundled-load boundary and generic root states. Do not start the SDUI renderer, action dispatcher, or visual assignment screen.
+
+Outcome: a single repository protocol and bundled implementation resolve `home-v1.json`, map source/compatibility/validation outcomes, and feed an `@MainActor` observable screen store. The root view presents a native progress indicator, compatibility fallback, retryable error states, or a renderer-pending host. The static baseline bypasses the load task.
+
+Rejected output or approach: direct bundle reads in a SwiftUI view, a separate source/use-case layer, a dependency-injection framework, automatic retry, cache, networking, `Task.detached`, or a premature component renderer.
+
+Why rejected: direct reads would couple I/O, parsing, and UI lifecycle; extra layers would exceed the small test seam required here; retries/caching/networking have no local-fixture requirement; and a renderer would cross the approved milestone boundary.
+
+Verification: `xcodebuild build-for-testing` compiled the application and test targets under Swift 6. A host-side execution of the production repository read `home-v1.json` from the built app bundle, preserved a typed missing-resource error, and drove the main-actor store to content. Simulator XCTest execution remains pending because the local CoreSimulator service is unavailable before tests start.
+
 ## Future records
 
 Record 3 and later entries will be added only after they occur during approved milestones.

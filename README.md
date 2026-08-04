@@ -4,7 +4,7 @@ This repository contains a deliberately scoped, native SwiftUI implementation of
 
 ## Status
 
-Milestone 3 is complete: the native project foundation, typed V1 SDUI contract, validation/compatibility outcomes, and deterministic bundled JSON fixtures are in place. The application deliberately remains on its safe root state; no SDUI page renderer or assignment screen has been implemented yet.
+Milestone 4 is complete: the typed V1 contract now loads through a small bundled repository into a main-actor screen store. The app exposes native loading, compatibility, and retryable-error states, but deliberately does not render the assignment screen yet.
 
 ## Source of truth
 
@@ -44,4 +44,4 @@ The implementation intentionally excludes live APIs, authentication, search, pro
 
 ## Milestone policy
 
-Each milestone is reviewed before the next begins. The next milestone may add the local asynchronous fixture source and screen loading state, but will not begin page rendering until its boundary is approved.
+Each milestone is reviewed before the next begins. The next milestone may introduce the native renderer for the approved V1 component types, but will not add screenshot-only product behaviour.

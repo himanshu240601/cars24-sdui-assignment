@@ -12,13 +12,15 @@ The written assignment adds the required tenure selector and bottom sheet. Those
 
 ## Architectural flow
 
-Local payload source -> asynchronous repository -> tolerant wire decode -> registry and validation -> immutable typed screen definition -> native SwiftUI renderer.
+Bundled payload -> asynchronous repository -> tolerant wire decode -> registry and validation -> immutable typed screen definition -> main-actor screen state -> native SwiftUI renderer.
 
 JSON action -> action dispatcher -> immutable interaction state or native presentation -> SwiftUI update.
 
 The typed screen definition keeps scrollable `sections` separate from declared `presentations`. The finance sheet is a presentation, not an invisible row inside the feed, so the renderer will not require a component-ID-specific skip rule.
 
 The static benchmark screen uses the same content, local assets, and reusable leaf views, but bypasses payload loading, decoding, the registry, and dynamic screen-tree rendering.
+
+The bundled repository exposes an `async` API even though the current fixture is local. It runs outside the main actor and keeps view lifecycle code independent of the payload mechanism. A detached task, cache, retry policy, or networking layer is not justified for this small immutable resource.
 
 ## Decisions
 
@@ -37,8 +39,8 @@ The static benchmark screen uses the same content, local assets, and reusable le
 
 | Area | Responsibility |
 |---|---|
-| App composition | Constructs the repository, registry, and screen store. Selects static or SDUI launch mode for development and benchmarks. |
-| Data source | Reads the bundled payload asynchronously. It has no UI knowledge. |
+| App composition | Constructs the bundled repository and screen store. Selects static or SDUI launch mode for development and benchmarks. |
+| Repository | Resolves the bundled payload, decodes it, and maps source/compatibility/validation outcomes. It has no UI knowledge. |
 | Decoding and validation | Converts the wire document into safe typed sections/presentations and captures invalid content locally. |
 | Component registry | Maps known server component names to component kinds and validation rules. |
 | Renderer | Turns a validated component model into a native SwiftUI view. |
@@ -86,9 +88,10 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Current milestone exit criteria
+## Milestone 4 exit criteria
 
-- Scope is written and consistent with the assignment.
-- Architecture separates wire content, render models, state, actions, and views.
-- The schema boundary and fixture matrix are defined before implementation.
-- AI constraints are written down and will be used for later implementation prompts.
+- The default SDUI launch path loads the bundled V1 fixture through the repository and screen store.
+- Loading, unsupported-major, invalid-document, and source-read failures are distinct native root states.
+- Invalid-document and source-read states offer a manual retry; no automatic retry or cache exists.
+- Static-baseline launch does not trigger SDUI payload loading or decoding.
+- No assignment renderer, action dispatcher, finance sheet, or visual component is introduced yet.
