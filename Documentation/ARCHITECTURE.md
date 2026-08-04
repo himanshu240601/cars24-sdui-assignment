@@ -44,8 +44,8 @@ The bundled repository exposes an `async` API even though the current fixture is
 | Decoding and validation | Converts the wire document into safe typed sections/presentations and captures invalid content locally. |
 | Component registry | Maps known server component names to component kinds and validation rules. |
 | Renderer | Turns immutable validated models into native SwiftUI views through an exhaustive section switch. It has no loading, decoding, or action-dispatch responsibility. |
-| Action dispatcher | Validates and handles a finite JSON action vocabulary. |
-| Screen state | Owns load state, selected tenure, and sheet presentation. It never mutates the decoded document. |
+| Action dispatcher | Purely resolves the finite JSON action vocabulary against the loaded typed definition. |
+| Screen state | Owns load state, selected tenure, and active sheet ID. It applies resolved actions but never mutates the decoded document. |
 | Leaf components | Render immutable content and emit supplied actions. They do not decode JSON or hold page-specific logic. |
 | Design system | Provides small shared visual primitives and semantic tokens, not an oversized component library. |
 
@@ -88,13 +88,11 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Milestone 6 exit criteria
+## Milestone 7 exit criteria
 
 - The renderer consumes only immutable `SDUIScreenDefinition` values from the content state.
-- The discovery header, illustrated-action rail, product rail, and standard service grid use native SwiftUI views with stable server IDs.
-- The service grid uses its validated two- or three-column payload configuration, narrowing a three-column layout only at accessibility Dynamic Type sizes to preserve readable labels.
-- Grid items remain static and let their height grow with Dynamic Type; decorative media remains hidden from VoiceOver.
-- Unknown and invalid payload nodes render compact local fallbacks without exposing raw server diagnostics.
-- Known V1 types whose native views are not yet approved are not mislabelled as unsupported.
-- Cards remain noninteractive until JSON actions have an approved dispatcher.
-- No highlighted service grid, vehicle card, finance sheet, navigation, search, or screenshot-only control is introduced.
+- The store seeds the selected tenure from a declared finance sheet while retaining an immutable decoded definition.
+- The finite reducer can present only a declared finance sheet, select only a declared tenure option, and dismiss the active sheet state.
+- Unsupported, unavailable, unresolved, and pre-content actions are safe no-ops.
+- The selected tenure persists across dismissal while active-sheet state is transient.
+- No renderer leaf emits an action yet; no vehicle card, native sheet UI, highlighted service grid, navigation, search, or screenshot-only control is introduced.

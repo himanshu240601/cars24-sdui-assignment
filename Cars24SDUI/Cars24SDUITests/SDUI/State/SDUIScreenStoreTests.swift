@@ -87,12 +87,121 @@ struct SDUIScreenStoreTests {
         #expect(invalidStore.state == .invalidDocument(.duplicateComponentID("duplicate")))
     }
 
+    @Test("A loaded finance definition seeds the bounded interaction state")
+    func seedsInteractionStateFromTheDeclaredFinanceSheet() async {
+        let definition = makeInteractiveDefinition()
+        let repository = ScriptedScreenRepository(outcomes: [.content(definition)])
+        let store = SDUIScreenStore(repository: repository)
+
+        await store.loadIfNeeded()
+
+        #expect(store.interactionState == SDUIScreenInteractionState(
+            selectedTenureOptionID: "48-months"
+        ))
+        #expect(store.state == .content(definition))
+    }
+
+    @Test("Known finance actions update only the bounded interaction state")
+    func dispatchesKnownFinanceActions() async {
+        let definition = makeInteractiveDefinition()
+        let repository = ScriptedScreenRepository(outcomes: [.content(definition)])
+        let store = SDUIScreenStore(repository: repository)
+
+        await store.loadIfNeeded()
+
+        store.dispatch(.setSelection(selectionKey: .selectedTenure, optionID: "36-months"))
+        #expect(store.interactionState.selectedTenureOptionID == "36-months")
+        #expect(store.interactionState.activeSheetID == nil)
+
+        store.dispatch(.presentSheet(sheetID: "finance-options"))
+        #expect(store.interactionState.selectedTenureOptionID == "36-months")
+        #expect(store.interactionState.activeSheetID == "finance-options")
+
+        store.dispatch(.dismissSheet)
+        #expect(store.interactionState.selectedTenureOptionID == "36-months")
+        #expect(store.interactionState.activeSheetID == nil)
+        #expect(store.state == .content(definition))
+    }
+
+    @Test("Unresolved and nonexecutable actions do not mutate interaction state")
+    func ignoresUnresolvedAndNonexecutableActions() async {
+        let definition = makeInteractiveDefinition()
+        let repository = ScriptedScreenRepository(outcomes: [.content(definition)])
+        let store = SDUIScreenStore(repository: repository)
+
+        store.dispatch(.presentSheet(sheetID: "finance-options"))
+        #expect(store.interactionState == SDUIScreenInteractionState())
+
+        await store.loadIfNeeded()
+        let initialInteractionState = store.interactionState
+
+        store.dispatch(.presentSheet(sheetID: "missing-sheet"))
+        store.dispatch(.setSelection(selectionKey: .selectedTenure, optionID: "missing-option"))
+        store.dispatch(.unsupported(type: "futureAction"))
+        store.dispatch(.unavailable(type: "presentSheet", reason: "Missing sheet ID."))
+
+        #expect(store.interactionState == initialInteractionState)
+    }
+
     private func makeDefinition() -> SDUIScreenDefinition {
         SDUIScreenDefinition(
             schemaVersion: 1,
             screenID: "test-screen",
             sections: [],
             presentations: []
+        )
+    }
+
+    private func makeInteractiveDefinition() -> SDUIScreenDefinition {
+        let financeSheet = SDUIComponentInstance(
+            id: "finance-options",
+            variant: nil,
+            actions: [],
+            content: SDUIFinanceSheetProps(
+                title: "Choose your loan tenure",
+                selectionKey: .selectedTenure,
+                initialOptionID: "48-months",
+                options: [
+                    SDUIFinanceOption(
+                        id: "36-months",
+                        label: "36 months",
+                        emiText: "EMI ₹20,598/month",
+                        action: .setSelection(
+                            selectionKey: .selectedTenure,
+                            optionID: "36-months"
+                        )
+                    ),
+                    SDUIFinanceOption(
+                        id: "48-months",
+                        label: "48 months",
+                        emiText: "EMI ₹16,008/month",
+                        action: .setSelection(
+                            selectionKey: .selectedTenure,
+                            optionID: "48-months"
+                        )
+                    )
+                ]
+            )
+        )
+
+        return SDUIScreenDefinition(
+            schemaVersion: 1,
+            screenID: "interactive-test-screen",
+            sections: [
+                .discoveryHeader(
+                    SDUIComponentInstance(
+                        id: "header",
+                        variant: nil,
+                        actions: [],
+                        content: SDUIDiscoveryHeaderProps(
+                            title: "Test screen",
+                            subtitle: nil,
+                            symbolName: nil
+                        )
+                    )
+                )
+            ],
+            presentations: [.financeSheet(financeSheet)]
         )
     }
 }

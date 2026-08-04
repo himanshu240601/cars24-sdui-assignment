@@ -93,6 +93,18 @@ Why rejected: the existing typed contract is sufficient; the normal layout must 
 
 Verification: `xcodebuild build-for-testing` compiled the application and test targets under Swift 6. The primary fixture test now asserts the exact typed service-grid input, while the existing invalid-grid fixture continues to prove invalid column counts localize safely. The UI smoke test adds the grid title and first item. An `xcodebuild test` run began on an iPhone 16 test clone, but the local CoreSimulator service crashed before Xcode finalized its result bundle; no runtime XCTest pass is claimed.
 
+### Record 7 - bounded finance action/state foundation
+
+Prompt intent: after Milestone 7 approval, implement the finite JSON action reducer and screen interaction state needed by the finance flow. Do not add a vehicle renderer, native sheet, any action-emitting view, navigation, persistence, or a generic event system.
+
+Outcome: `SDUIActionDispatcher` is a pure reducer over the immutable typed definition and a two-field interaction value (`selectedTenureOptionID` and `activeSheetID`). The main-actor screen store owns that value, seeds the default tenure when content loads, and exposes a narrow action-dispatch method. Known actions can only target declared finance-sheet/option data; unsupported, unavailable, unresolved, and pre-content actions leave state unchanged.
+
+Rejected output or approach: a generic command/reducer framework, event bus, mutable payload model, selection dictionary, persistence, analytics, finance calculation, action logic in a SwiftUI view, or requiring a sheet to be visible before the contractually valid selection action may run.
+
+Why rejected: V1 has one finite selection key and three action kinds; the document already declares display values and targets; UI lifecycle is not a contract condition for `setSelection`; and the remaining approaches add unsupported state or obscure the small, testable boundary.
+
+Verification: deterministic main-actor store tests cover initial tenure seeding, valid selection/present/dismiss transitions, document immutability, and no-op behavior before content or for unresolved/nonexecutable actions. `xcodebuild build-for-testing` compiled the application and test targets under Swift 6. On an iPhone 16 simulator, `xcodebuild test -only-testing:Cars24SDUITests` passed all 23 unit tests and `xcodebuild test -only-testing:Cars24SDUIUITests` passed both UI smoke tests.
+
 ## Future records
 
 Future records will be added only after they occur during approved milestones.

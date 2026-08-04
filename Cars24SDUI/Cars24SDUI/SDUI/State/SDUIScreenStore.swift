@@ -39,14 +39,15 @@ nonisolated enum SDUIScreenLoadState: Equatable, Sendable {
     }
 }
 
-/// Owns one screen-load lifecycle. It never interprets actions or mutates the
-/// immutable decoded screen definition.
+/// Owns one screen-load lifecycle and its finite interaction state. It applies
+/// resolved actions but never mutates the immutable decoded screen definition.
 @MainActor
 @Observable
 final class SDUIScreenStore {
     private let repository: any SDUIScreenRepository
 
     private(set) var state: SDUIScreenLoadState = .idle
+    private(set) var interactionState = SDUIScreenInteractionState()
 
     init(repository: any SDUIScreenRepository) {
         self.repository = repository
@@ -70,8 +71,23 @@ final class SDUIScreenStore {
         await load()
     }
 
+    /// Applies a known V1 action only while a validated definition is loaded.
+    /// Unsupported, unavailable, or unresolved targets are safe no-ops.
+    func dispatch(_ action: SDUIAction) {
+        guard case .content(let definition) = state else {
+            return
+        }
+
+        SDUIActionDispatcher.apply(
+            action,
+            to: &interactionState,
+            in: definition
+        )
+    }
+
     private func load() async {
         state = .loading
+        interactionState = SDUIScreenInteractionState()
         let outcome = await repository.loadScreen()
 
         guard !Task.isCancelled else {
@@ -79,6 +95,11 @@ final class SDUIScreenStore {
             return
         }
 
-        state = SDUIScreenLoadState(outcome: outcome)
+        let loadedState = SDUIScreenLoadState(outcome: outcome)
+        state = loadedState
+
+        if case .content(let definition) = loadedState {
+            interactionState = SDUIActionDispatcher.initialState(for: definition)
+        }
     }
 }

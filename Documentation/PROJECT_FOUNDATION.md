@@ -17,7 +17,7 @@
 
 ## Foundation behaviour
 
-The default SDUI launch path reads the bundled V1 fixture through a typed repository and main-actor screen store. It now renders the approved discovery header, two horizontal rail types, and standard service grid while preserving native loading, compatibility, and retryable-error states.
+The default SDUI launch path reads the bundled V1 fixture through a typed repository and main-actor screen store. It renders the approved discovery header, two horizontal rail types, and standard service grid while preserving native loading, compatibility, retryable-error, and bounded interaction states.
 
 The application accepts the launch argument -static-baseline. It selects the future static comparison variant; without it, the future SDUI variant is the default. The switch is a developer and benchmark harness, not a user-facing setting.
 
@@ -32,8 +32,8 @@ The application accepts the launch argument -static-baseline. It selects the fut
 
 ## Deferred work
 
-- Native renderers for the highlighted service grid, vehicle rail, promo banner, and finance presentation.
+- Native renderers for the highlighted service grid, vehicle rail, promo banner, and finance presentation UI.
 - Additional design tokens and reusable visual components justified by those renderers.
 - Static baseline composition.
-- Assignment UI and its JSON-defined finance interaction.
+- Assignment UI integration for the JSON-defined finance interaction.
 - Performance instrumentation and release benchmark scenarios.
