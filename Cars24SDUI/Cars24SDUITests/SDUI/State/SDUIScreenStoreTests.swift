@@ -109,11 +109,11 @@ struct SDUIScreenStoreTests {
 
         await store.loadIfNeeded()
 
-        store.dispatch(.setSelection(selectionKey: .selectedTenure, optionID: "36-months"))
-        #expect(store.interactionState.selectedTenureOptionID == "36-months")
-        #expect(store.interactionState.activeSheetID == nil)
-
         store.dispatch(.presentSheet(sheetID: "finance-options"))
+        #expect(store.interactionState.selectedTenureOptionID == "48-months")
+        #expect(store.interactionState.activeSheetID == "finance-options")
+
+        store.dispatch(.setSelection(selectionKey: .selectedTenure, optionID: "36-months"))
         #expect(store.interactionState.selectedTenureOptionID == "36-months")
         #expect(store.interactionState.activeSheetID == "finance-options")
 

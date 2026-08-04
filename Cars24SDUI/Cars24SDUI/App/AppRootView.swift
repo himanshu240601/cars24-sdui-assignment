@@ -23,7 +23,6 @@ struct AppRootView: View {
                 staticBaselinePlaceholder
             }
         }
-        .accessibilityIdentifier("app-root")
     }
 
     @ViewBuilder
@@ -34,7 +33,13 @@ struct AppRootView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .accessibilityIdentifier("sdui-loading")
         case .content(let definition):
-            SDUIScreenRenderer(definition: definition)
+            SDUIScreenRenderer(
+                definition: definition,
+                interactionState: screenStore.interactionState,
+                onAction: { action in
+                    screenStore.dispatch(action)
+                }
+            )
         case .unsupportedSchema(let major):
             ContentUnavailableView(
                 "Unsupported screen version",

@@ -51,7 +51,13 @@ struct SDUIDocumentDecoderTests {
             return
         }
 
-        #expect(rail.content.vehicles.first?.finance?.sheetID == "finance-options")
+        let financedVehicle = try #require(rail.content.vehicles.first)
+        #expect(financedVehicle.id == "2020-tata-nexon")
+        #expect(financedVehicle.title == "2020 Tata NEXON")
+        #expect(financedVehicle.priceText == "₹6.25 lakh")
+        #expect(financedVehicle.metadata == ["55,986 km", "Petrol", "Manual", "HR01"])
+        #expect(financedVehicle.finance?.sheetID == "finance-options")
+        #expect(financedVehicle.finance?.action == .presentSheet(sheetID: "finance-options"))
 
         guard case .financeSheet(let sheet) = document.presentations[0] else {
             Issue.record("The fixture must contain a finance sheet presentation.")
@@ -60,6 +66,17 @@ struct SDUIDocumentDecoderTests {
 
         #expect(sheet.content.initialOptionID == "48-months")
         #expect(sheet.content.options.map(\.id) == ["36-months", "48-months", "60-months"])
+        #expect(sheet.content.options.map(\.label) == ["36 months", "48 months", "60 months"])
+        #expect(sheet.content.options.map(\.emiText) == [
+            "EMI ₹20,598/month",
+            "EMI ₹16,008/month",
+            "EMI ₹13,313/month"
+        ])
+        #expect(sheet.content.options.map(\.action) == [
+            .setSelection(selectionKey: .selectedTenure, optionID: "36-months"),
+            .setSelection(selectionKey: .selectedTenure, optionID: "48-months"),
+            .setSelection(selectionKey: .selectedTenure, optionID: "60-months")
+        ])
     }
 
     @Test("An unknown component remains local and known siblings stay valid")

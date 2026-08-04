@@ -54,6 +54,32 @@ nonisolated struct SDUIScreenDefinition: Equatable, Sendable {
     let presentations: [SDUIPresentation]
 }
 
+extension SDUIScreenDefinition {
+    /// Finance presentations remain outside the scrollable section list, so
+    /// renderers and the action reducer resolve them through this typed view.
+    nonisolated var financeSheets: [SDUIComponentInstance<SDUIFinanceSheetProps>] {
+        presentations.compactMap { presentation in
+            guard case .financeSheet(let sheet) = presentation else {
+                return nil
+            }
+
+            return sheet
+        }
+    }
+
+    nonisolated func financeSheet(
+        withID sheetID: String
+    ) -> SDUIComponentInstance<SDUIFinanceSheetProps>? {
+        financeSheets.first { $0.id == sheetID }
+    }
+
+    nonisolated func financeSheet(
+        for selectionKey: SDUISelectionKey
+    ) -> SDUIComponentInstance<SDUIFinanceSheetProps>? {
+        financeSheets.first { $0.content.selectionKey == selectionKey }
+    }
+}
+
 nonisolated enum SDUISection: Equatable, Sendable {
     case discoveryHeader(SDUIComponentInstance<SDUIDiscoveryHeaderProps>)
     case illustratedActionRail(SDUIComponentInstance<SDUIIllustratedActionRailProps>)
@@ -286,6 +312,17 @@ nonisolated struct SDUIFinanceSheetProps: Decodable, Equatable, Sendable {
 
     var declaredActions: [SDUIAction] {
         options.map(\.action)
+    }
+
+    /// Chooses a declared display value without calculating or storing finance
+    /// data locally. Validation guarantees the initial option is declared.
+    nonisolated func displayedOption(selectedID: String?) -> SDUIFinanceOption? {
+        if let selectedID,
+           let selectedOption = options.first(where: { $0.id == selectedID }) {
+            return selectedOption
+        }
+
+        return options.first { $0.id == initialOptionID }
     }
 }
 

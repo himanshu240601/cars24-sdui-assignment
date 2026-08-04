@@ -105,6 +105,20 @@ Why rejected: V1 has one finite selection key and three action kinds; the docume
 
 Verification: deterministic main-actor store tests cover initial tenure seeding, valid selection/present/dismiss transitions, document immutability, and no-op behavior before content or for unresolved/nonexecutable actions. `xcodebuild build-for-testing` compiled the application and test targets under Swift 6. On an iPhone 16 simulator, `xcodebuild test -only-testing:Cars24SDUITests` passed all 23 unit tests and `xcodebuild test -only-testing:Cars24SDUIUITests` passed both UI smoke tests.
 
+### Record 8 - vehicle rail and native finance presentation
+
+Prompt intent: after Milestone 8 approval, implement only the typed vehicle rail and assignment-required finance interaction: declared EMI action, native sheet, tenure options, and visible EMI update. Do not add vehicle detail navigation, favourite actions, finance calculation, local sheet state, highlighted service content, promotions, search, or screenshot-only controls.
+
+Outcome: the root injects immutable content, the bounded interaction value, and one action closure into the renderer. The vehicle rail resolves only declared finance-sheet data, renders the selected declared `emiText`, and emits the exact vehicle action. One native SwiftUI sheet derives its visibility from `activeSheetID`; interactive dismissal routes through the reducer. Finance rows are full-size native buttons with visible/VoiceOver selected state, while their values stay in the decoded payload rather than a client calculator.
+
+Rejected output or approach: passing the observable store into leaf views, a generic presentation router, a `selectedVehicleID`, a selection dictionary, a local `@State` tenure value, a custom modal, a finance calculator, vehicle navigation, or making every action-bearing payload field interactive.
+
+Why rejected: V1 declares one bounded tenure binding and one presentation type. The decoder already validates references, and native SwiftUI sheet behavior gives accessible, expected dismissal without more product surface or architecture.
+
+AI issue caught: the first UI test queried a title that appears both in the finance CTA and in the sheet. The test was tightened to scope title, option, EMI, and dismissal assertions to the identified native sheet, so it verifies the presented surface rather than an ambiguous duplicate label.
+
+Verification: `xcodebuild build-for-testing` compiled the Swift 6 application and both test targets. The simulator unit suite passed all 23 tests. The focused UI path passed after the selector correction: tap declared EMI action, open the native sheet, select 36 months, observe the declared EMI value, swipe the sheet down, and retain the updated vehicle EMI. The final serial UI suite passed all three UI tests on an iPhone 17 Pro simulator.
+
 ## Future records
 
 Future records will be added only after they occur during approved milestones.

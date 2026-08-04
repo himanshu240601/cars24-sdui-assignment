@@ -11,12 +11,21 @@ import SwiftUI
 /// decoding, and action dispatch intentionally remain outside this view.
 struct SDUIScreenRenderer: View {
     let definition: SDUIScreenDefinition
+    let interactionState: SDUIScreenInteractionState
+    let onAction: (SDUIAction) -> Void
+
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: SDUIStyle.sectionSpacing) {
                 ForEach(definition.sections, id: \.id) { section in
-                    SDUISectionRenderer(section: section)
+                    SDUISectionRenderer(
+                        section: section,
+                        financeSheets: definition.financeSheets,
+                        selectedTenureOptionID: interactionState.selectedTenureOptionID,
+                        onAction: onAction
+                    )
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("sdui-section-\(section.id)")
                 }
@@ -25,11 +34,50 @@ struct SDUIScreenRenderer: View {
         }
         .background(Color(uiColor: .systemBackground))
         .accessibilityIdentifier("sdui-screen-\(definition.screenID)")
+        .sheet(isPresented: isFinanceSheetPresented) {
+            if let activeFinanceSheet {
+                SDUIFinanceSheet(
+                    component: activeFinanceSheet,
+                    selectedOptionID: interactionState.selectedTenureOptionID,
+                    onAction: onAction
+                )
+                .presentationDetents(financeSheetDetents)
+                .presentationDragIndicator(.visible)
+            }
+        }
+    }
+
+    private var activeFinanceSheet: SDUIComponentInstance<SDUIFinanceSheetProps>? {
+        guard let activeSheetID = interactionState.activeSheetID else {
+            return nil
+        }
+
+        return definition.financeSheet(withID: activeSheetID)
+    }
+
+    private var isFinanceSheetPresented: Binding<Bool> {
+        Binding(
+            get: {
+                activeFinanceSheet != nil
+            },
+            set: { isPresented in
+                if !isPresented {
+                    onAction(.dismissSheet)
+                }
+            }
+        )
+    }
+
+    private var financeSheetDetents: Set<PresentationDetent> {
+        dynamicTypeSize.isAccessibilitySize ? [.large] : [.medium, .large]
     }
 }
 
 private struct SDUISectionRenderer: View {
     let section: SDUISection
+    let financeSheets: [SDUIComponentInstance<SDUIFinanceSheetProps>]
+    let selectedTenureOptionID: String?
+    let onAction: (SDUIAction) -> Void
 
     @ViewBuilder
     var body: some View {
@@ -42,11 +90,18 @@ private struct SDUISectionRenderer: View {
             SDUIProductRailSection(component: component)
         case .serviceGrid(let component):
             SDUIServiceGridSection(component: component)
+        case .vehicleRail(let component):
+            SDUIVehicleRailSection(
+                component: component,
+                financeSheets: financeSheets,
+                selectedTenureOptionID: selectedTenureOptionID,
+                onAction: onAction
+            )
         case .unsupported(let node):
             SDUISectionFallbackView(id: node.id, kind: .unsupported)
         case .invalid(let node):
             SDUISectionFallbackView(id: node.id, kind: .invalid)
-        case .vehicleRail, .highlightedServiceGrid, .promoBanner:
+        case .highlightedServiceGrid, .promoBanner:
             // These are known V1 types whose native renderers are deliberately
             // deferred to later approved milestones. They are not unsupported
             // payload nodes and must not be labelled as such.

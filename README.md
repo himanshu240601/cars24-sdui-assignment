@@ -4,7 +4,7 @@ This repository contains a deliberately scoped, native SwiftUI implementation of
 
 ## Status
 
-Milestone 7 is complete: the app has a finite, tested JSON action reducer, an immutable decoded definition, and bounded interaction state for the finance flow. No control exposes that behavior yet; vehicle and native sheet UI remain deliberately deferred to the next milestone.
+Milestone 8 is complete: the typed vehicle rail, native finance sheet, and bounded JSON action flow are visible and tested. A declared EMI affordance opens the declared sheet, tenure selection updates the displayed JSON EMI value, and native dismissal preserves that selection.
 
 ## Source of truth
 
@@ -44,4 +44,4 @@ The implementation intentionally excludes live APIs, authentication, search, pro
 
 ## Milestone policy
 
-Each milestone is reviewed before the next begins. The next milestone may add the vehicle rail and native finance sheet UI using the approved action/state foundation, but will not add screenshot-only product behaviour.
+Each milestone is reviewed before the next begins. Milestone 9 is approved to render the remaining typed `highlightedServiceGrid` and `promoBanner` sections without adding screenshot-only behaviour, navigation, or new actions.

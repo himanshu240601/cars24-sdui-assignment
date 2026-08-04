@@ -88,11 +88,13 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Milestone 7 exit criteria
+## Milestone 8 exit criteria
 
-- The renderer consumes only immutable `SDUIScreenDefinition` values from the content state.
-- The store seeds the selected tenure from a declared finance sheet while retaining an immutable decoded definition.
-- The finite reducer can present only a declared finance sheet, select only a declared tenure option, and dismiss the active sheet state.
-- Unsupported, unavailable, unresolved, and pre-content actions are safe no-ops.
-- The selected tenure persists across dismissal while active-sheet state is transient.
-- No renderer leaf emits an action yet; no vehicle card, native sheet UI, highlighted service grid, navigation, search, or screenshot-only control is introduced.
+- The root injects immutable screen content, bounded interaction state, and a narrow action closure; leaf views do not receive the store.
+- The vehicle rail renders only typed vehicle data and a finance button only when its declared finance action can resolve to a declared sheet.
+- The visible EMI is a declared `emiText` value selected from the immutable finance presentation; the client performs no finance calculation.
+- The native sheet derives presentation from `activeSheetID`; its false binding write dispatches the declared dismissal action so swipe and VoiceOver escape remain synchronized with state.
+- Tenure rows are full native buttons with a visible and accessible selected state. They retain no local selection state and emit their own JSON-defined actions.
+- The selected tenure persists across native dismissal while active-sheet state is transient.
+- The focused UI test covers the user-visible assignment flow: vehicle EMI action, finance sheet, tenure selection, updated EMI, and native dismissal.
+- No vehicle detail navigation, favourite action, search, profile, full tab navigation, finance calculation, highlighted service grid, or promo banner is introduced in this milestone.

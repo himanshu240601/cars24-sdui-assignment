@@ -25,7 +25,7 @@ nonisolated struct SDUIScreenInteractionState: Equatable, Sendable {
 /// generic command or event system.
 nonisolated enum SDUIActionDispatcher {
     static func initialState(for definition: SDUIScreenDefinition) -> SDUIScreenInteractionState {
-        guard let sheet = financeSheet(for: .selectedTenure, in: definition) else {
+        guard let sheet = definition.financeSheet(for: .selectedTenure) else {
             return SDUIScreenInteractionState()
         }
 
@@ -41,7 +41,7 @@ nonisolated enum SDUIActionDispatcher {
     ) {
         switch action {
         case .presentSheet(let sheetID):
-            guard let sheet = financeSheet(withID: sheetID, in: definition) else {
+            guard let sheet = definition.financeSheet(withID: sheetID) else {
                 return
             }
 
@@ -52,7 +52,7 @@ nonisolated enum SDUIActionDispatcher {
 
         case .setSelection(let selectionKey, let optionID):
             guard
-                let sheet = financeSheet(for: selectionKey, in: definition),
+                let sheet = definition.financeSheet(for: selectionKey),
                 sheet.content.options.contains(where: { $0.id == optionID })
             else {
                 return
@@ -66,39 +66,5 @@ nonisolated enum SDUIActionDispatcher {
         case .unsupported, .unavailable:
             return
         }
-    }
-
-    private static func financeSheet(
-        withID sheetID: String,
-        in definition: SDUIScreenDefinition
-    ) -> SDUIComponentInstance<SDUIFinanceSheetProps>? {
-        for presentation in definition.presentations {
-            guard case .financeSheet(let sheet) = presentation else {
-                continue
-            }
-
-            if sheet.id == sheetID {
-                return sheet
-            }
-        }
-
-        return nil
-    }
-
-    private static func financeSheet(
-        for selectionKey: SDUISelectionKey,
-        in definition: SDUIScreenDefinition
-    ) -> SDUIComponentInstance<SDUIFinanceSheetProps>? {
-        for presentation in definition.presentations {
-            guard case .financeSheet(let sheet) = presentation else {
-                continue
-            }
-
-            if sheet.content.selectionKey == selectionKey {
-                return sheet
-            }
-        }
-
-        return nil
     }
 }
