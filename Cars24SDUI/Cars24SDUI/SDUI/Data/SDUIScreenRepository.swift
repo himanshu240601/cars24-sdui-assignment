@@ -62,9 +62,21 @@ nonisolated struct BundledSDUIScreenRepository: SDUIScreenRepository {
         }
 
         do {
-            let data = try Data(contentsOf: documentURL)
+            SDUIPerformanceSignposts.begin(.fixtureRead)
+            let data: Data
+            do {
+                data = try Data(contentsOf: documentURL)
+            } catch {
+                SDUIPerformanceSignposts.end(.fixtureRead)
+                throw error
+            }
+            SDUIPerformanceSignposts.end(.fixtureRead)
 
-            switch decoder.decode(data) {
+            SDUIPerformanceSignposts.begin(.decodeAndValidate)
+            let result = decoder.decode(data)
+            SDUIPerformanceSignposts.end(.decodeAndValidate)
+
+            switch result {
             case .compatible(let definition):
                 return .content(definition)
             case .unsupportedSchema(let major):

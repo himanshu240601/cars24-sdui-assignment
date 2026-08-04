@@ -4,9 +4,11 @@ This repository contains a deliberately scoped, native SwiftUI implementation of
 
 ## Status
 
-Milestones 8 through 10 are complete: all seven declared V1 feed section types render as focused native SwiftUI views. The typed vehicle rail, native finance sheet, and bounded JSON action flow remain the only interactive assignment flow. The highlighted service grid and promotional banner are static, accessible presentations of their validated payload data; no screenshot-only behaviour or new actions were added.
+Milestones 8 through 11 are complete: all seven declared V1 feed section types render as focused native SwiftUI views, and a release-only performance harness compares the static and SDUI execution paths. The typed vehicle rail, native finance sheet, and bounded JSON action flow remain the only interactive assignment flow. The highlighted service grid and promotional banner are static, accessible presentations of their validated payload data; no screenshot-only behaviour or new actions were added.
 
 The `-static-baseline` launch mode renders the same canonical home content from a direct source-code snapshot. It bypasses the SDUI load, decode, registry, validation, renderer, and action paths, and intentionally presents the initial EMI as static text rather than providing a second finance flow.
+
+`Cars24SDUIPerformance` is a shared Release scheme containing opt-in UI performance tests. Its local simulator preflight validates the signposts and routes only; the written assignment's physical-device performance result remains pending while the connected iPhone is offline. See `PERF.md` for the exact capture procedure and reporting boundary.
 
 ## Source of truth
 
@@ -43,7 +45,8 @@ The implementation intentionally excludes live APIs, authentication, search, pro
 - Documentation/PROJECT_FOUNDATION.md - Xcode target, language, and launch-mode decisions.
 - Documentation/AI_CONTEXT.md - constraints governing AI-assisted work.
 - AI_WORKFLOW.md - contemporaneous AI evidence log and verification strategy.
+- PERF.md - Release benchmark protocol, metric boundaries, and physical-device result table.
 
 ## Milestone policy
 
-Each milestone is reviewed before the next begins. Milestone 11 has not started; it will add a repeatable release-build measurement protocol for the two completed render paths without altering the SDUI contract or product scope.
+Each milestone is reviewed before the next begins. Milestone 11 adds a repeatable Release-build measurement protocol for the two completed render paths without altering the SDUI contract or product scope. Its physical-device capture remains an external submission step because the connected iPhone is currently offline.

@@ -19,7 +19,7 @@
 
 The default SDUI launch path reads the bundled V1 fixture through a typed repository and main-actor screen store. It renders all seven declared feed section types: discovery header, two horizontal rails, standard service grid, vehicle rail, highlighted service grid, and promo banner. It preserves native loading, compatibility, retryable-error, and bounded interaction states. The declared finance presentation is a native sheet whose options update the selected declared EMI value through the bounded action dispatcher; the remaining V1 sections are static unless an approved executable action is explicitly implemented.
 
-The application accepts the launch argument `-static-baseline`. It selects `StaticBaselineHomeView`, a direct SwiftUI source snapshot of the canonical V1 home content; without it, the SDUI variant is the default. The static branch does not attach the SDUI load task, so it does not read the fixture or invoke its decode, registry, validation, renderer, or action-dispatch path. It reuses only visual primitives (tokens, local-media fallback, and section title) and intentionally leaves the initial EMI noninteractive. The switch is a developer and benchmark harness, not a user-facing setting.
+The application accepts the launch argument `-static-baseline`. It selects `StaticBaselineHomeView`, a direct SwiftUI source snapshot of the canonical V1 home content; without it, the SDUI variant is the default. The static branch does not attach the SDUI load task, so it does not read the fixture or invoke its decode, registry, validation, renderer, or action-dispatch path. It reuses only visual primitives (tokens, local-media fallback, and section title) and intentionally leaves the initial EMI noninteractive. The switch is a developer and benchmark harness, not a user-facing setting. The two additional `-performance-*` arguments are private to the Release UI-test harness; they gate signposts and a non-animated full-feed benchmark route without changing normal app behavior.
 
 `AppLaunchMode` is explicitly `nonisolated`. Argument resolution is pure value logic and must stay independently testable even though this Swift 6 target defaults application code to the main actor. SwiftUI presentation remains main-actor-bound.
 
@@ -32,5 +32,5 @@ The application accepts the launch argument `-static-baseline`. It selects `Stat
 
 ## Deferred work
 
-- Performance instrumentation and release benchmark scenarios.
+- Capture the documented Release benchmark on one connected physical iPhone; simulator preflight data is not a submission result.
 - Additional design tokens or reusable visual components only when a demonstrated fidelity or maintainability need justifies them.

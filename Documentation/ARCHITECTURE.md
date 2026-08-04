@@ -108,3 +108,14 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Static sections use accessibility containment so their stable section identifiers do not suppress the cards, tiles, vehicle, or banner identifiers beneath them.
 - The focused launch test verifies the static root, canonical vehicle EMI, lower highlighted tile, and promo banner while asserting that neither the SDUI root nor its finance action exists.
 - No performance result is claimed yet; release-build instrumentation and a documented measurement protocol remain separate work.
+
+## Milestone 11 performance boundaries
+
+- `Cars24SDUIPerformance` is a dedicated shared scheme that builds the app and UI-test target in Release configuration without enabling testability in app code.
+- The benchmark tests compile only for that UI-test target's Release configuration; normal Debug tests and product launches do not carry benchmark test behavior.
+- `XCTApplicationLaunchMetric` owns the assignment's cold TTR and TTI measurement. App-process signposts are diagnostic phase measurements, not substitutes for process-launch timing.
+- The SDUI path emits named, benchmark-gated signposts around bundled fixture read, decode/validation, content publication-to-first-render, and bootstrap-to-full-content.
+- The full-content route uses a private benchmark launch argument to scroll to the last canonical section without animation. It prevents UI automation swipe latency from contaminating the app-process signpost and never changes normal initial scroll position.
+- Static and SDUI variants use the same full-content route, canonical content, device destination, and repeated measurement count.
+- The scroll test follows eight fixed upward swipes and uses XCTest's scrolling/deceleration metric. It is a device-only result; absence of a simulator export is not a product-performance conclusion.
+- `PERF.md` prohibits reporting simulator results as the assignment's physical-device comparison and records the reproducible capture protocol.

@@ -17,23 +17,42 @@ struct SDUIScreenRenderer: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: SDUIStyle.sectionSpacing) {
-                ForEach(definition.sections, id: \.id) { section in
-                    SDUISectionRenderer(
-                        section: section,
-                        financeSheets: definition.financeSheets,
-                        selectedTenureOptionID: interactionState.selectedTenureOptionID,
-                        onAction: onAction
-                    )
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("sdui-section-\(section.id)")
+        ScrollViewReader { scrollProxy in
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: SDUIStyle.sectionSpacing) {
+                    ForEach(definition.sections, id: \.id) { section in
+                        SDUISectionRenderer(
+                            section: section,
+                            financeSheets: definition.financeSheets,
+                            selectedTenureOptionID: interactionState.selectedTenureOptionID,
+                            onAction: onAction
+                        )
+                            .id(section.id)
+                            .accessibilityElement(children: .contain)
+                            .accessibilityIdentifier("sdui-section-\(section.id)")
+                            .onAppear {
+                                if section.id == definition.sections.last?.id {
+                                    SDUIPerformanceSignposts.end(.bootstrapToFullContent)
+                                }
+                            }
+                    }
+                }
+                .padding(.vertical, 16)
+            }
+            .background(Color(uiColor: .systemBackground))
+            .accessibilityIdentifier("sdui-screen-\(definition.screenID)")
+            .onAppear {
+                SDUIPerformanceSignposts.end(.contentStateToFirstRender)
+                SDUIPerformanceSignposts.markInitialScreenReady()
+
+                if SDUIPerformanceSignposts.shouldScrollToEnd,
+                   let finalSectionID = definition.sections.last?.id {
+                    DispatchQueue.main.async {
+                        scrollProxy.scrollTo(finalSectionID, anchor: .bottom)
+                    }
                 }
             }
-            .padding(.vertical, 16)
         }
-        .background(Color(uiColor: .systemBackground))
-        .accessibilityIdentifier("sdui-screen-\(definition.screenID)")
         .sheet(isPresented: isFinanceSheetPresented) {
             if let activeFinanceSheet {
                 SDUIFinanceSheet(

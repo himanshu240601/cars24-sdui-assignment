@@ -147,6 +147,20 @@ AI issue caught: the first baseline UI test could not discover the promo banner 
 
 Verification: `xcodebuild test -only-testing:Cars24SDUITests` passed all 23 unit tests on an iPhone 17 Pro simulator. The final serial `xcodebuild test -only-testing:Cars24SDUIUITests` run passed all three UI tests: full SDUI feed, finance-sheet update/dismissal, and isolated static baseline.
 
+### Record 11 - release performance harness and reporting protocol
+
+Prompt intent: after Milestone 11 approval, add only the assignment-required, release-mode performance instrumentation, comparison scheme, benchmark scenarios, and report. Do not tune product behavior, manufacture physical-device figures, or add caching/preloading in advance of measured evidence.
+
+Outcome: a Release-only UI-test configuration compares the direct static baseline and SDUI path through native launch metrics, paired `os_signpost` intervals, a symmetric test-only full-feed route, and the system scrolling/deceleration metric. The report fixes the fixture, launch, sampling, median/spread, and physical-device protocol and leaves the required result table explicitly pending until a connected iPhone is available. Normal launches never receive the benchmark-only scroll route or emitted signposts.
+
+Rejected output or approach: naming app-init signposts as cold TTR/TTI, using simulator timings as submission figures, timing full-feed rendering around UI-test swipes, caching the decoded fixture before a bottleneck is observed, or making Release app code testable just for the unit target.
+
+Why rejected: custom markers begin after process launch; simulator scheduling and launch behavior are not physical-device evidence; automation gesture latency is not renderer latency; an optimization would contaminate the comparison before data exists; and the performance scheme needs only the UI-test target.
+
+AI issue caught: the first implementation treated the app-process signposts as launch metrics and used the UI test's scroll gestures inside the full-feed interval. The markers were renamed to diagnostic bootstrap intervals, `XCTApplicationLaunchMetric` became the documented source of truth for cold TTR/TTI, and the benchmark-only `ScrollViewReader` route now reaches the final section without measuring XCTest gesture overhead. Review also exposed an unmatched full-content signpost in non-full-feed scenarios and a first benchmark iteration that could inherit a running app; the signpost now starts only for the matching route and every benchmark launch terminates first. A serial UI run also exposed a finance test that reused a prior app instance and attempted to tap an offscreen existing element; its helper now terminates before launch and reveals elements only once they are hittable.
+
+Verification: `xcodebuild -list` discovers both `Cars24SDUI` and `Cars24SDUIPerformance`. The normal Release app build succeeded. The final Debug regression suite passed all 26 tests. A Release iPhone 17 Pro simulator preflight passed the seven non-scroll benchmark scenarios; after the deterministic fixed-swipe refinement, both Release scroll scenarios passed separately, and the hardened full-feed route passed again. No physical-device result or optimization claim is made because the only detected physical iPhone was offline.
+
 ## Future records
 
 Future records will be added only after they occur during approved milestones.

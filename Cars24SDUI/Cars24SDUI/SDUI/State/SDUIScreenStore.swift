@@ -96,10 +96,12 @@ final class SDUIScreenStore {
         }
 
         let loadedState = SDUIScreenLoadState(outcome: outcome)
-        state = loadedState
 
         if case .content(let definition) = loadedState {
             interactionState = SDUIActionDispatcher.initialState(for: definition)
+            SDUIPerformanceSignposts.begin(.contentStateToFirstRender)
         }
+
+        state = loadedState
     }
 }

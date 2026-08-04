@@ -38,7 +38,7 @@ Build a narrow, production-quality native SwiftUI SDUI assignment submission tha
 - No force casts, raw JSON in views, or component-ID-specific business rules.
 - Every user-visible state has a loading, valid, or safe failure path where applicable.
 - Every new component has a clear reason to exist and a defined test seam.
-- Performance claims require repeatable release-build evidence.
+- Performance claims require repeatable Release-build evidence from the same physical device; simulator preflight results validate harness behavior only.
 - AI-generated output must be reviewed, challenged, and verified.
 
 ## Review questions before accepting a change

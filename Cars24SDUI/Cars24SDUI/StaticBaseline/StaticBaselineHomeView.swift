@@ -15,41 +15,58 @@ struct StaticBaselineHomeView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: SDUIStyle.sectionSpacing) {
-                StaticBaselineHeader()
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-discovery-header")
+        ScrollViewReader { scrollProxy in
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: SDUIStyle.sectionSpacing) {
+                    StaticBaselineHeader()
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-discovery-header")
 
-                StaticBaselineIllustratedActionRail()
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-buy-actions")
+                    StaticBaselineIllustratedActionRail()
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-buy-actions")
 
-                StaticBaselineProductRail()
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-loan-products")
+                    StaticBaselineProductRail()
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-loan-products")
 
-                StaticBaselineServiceGrid(columns: gridColumns)
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-car-check-services")
+                    StaticBaselineServiceGrid(columns: gridColumns)
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-car-check-services")
 
-                StaticBaselineVehicleRail()
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-used-cars-youll-love")
+                    StaticBaselineVehicleRail()
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-used-cars-youll-love")
 
-                StaticBaselineHighlightedServiceGrid(columns: gridColumns)
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-manage-your-vehicle")
+                    StaticBaselineHighlightedServiceGrid(columns: gridColumns)
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-manage-your-vehicle")
 
-                StaticBaselinePromoBanner()
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("static-baseline-section-spotify-promo")
+                    StaticBaselinePromoBanner()
+                        .id(finalSectionID)
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("static-baseline-section-spotify-promo")
+                        .onAppear {
+                            SDUIPerformanceSignposts.end(.bootstrapToFullContent)
+                        }
+                }
+                .padding(.vertical, 16)
             }
-            .padding(.vertical, 16)
+            .background(Color(uiColor: .systemBackground))
+            .accessibilityIdentifier("static-baseline-home")
+            .onAppear {
+                SDUIPerformanceSignposts.markInitialScreenReady()
+
+                if SDUIPerformanceSignposts.shouldScrollToEnd {
+                    DispatchQueue.main.async {
+                        scrollProxy.scrollTo(finalSectionID, anchor: .bottom)
+                    }
+                }
+            }
         }
-        .background(Color(uiColor: .systemBackground))
-        .accessibilityIdentifier("static-baseline-home")
     }
+
+    private let finalSectionID = "static-baseline-final-section"
 
     private var gridColumns: [GridItem] {
         let count = dynamicTypeSize.isAccessibilitySize ? 2 : 3

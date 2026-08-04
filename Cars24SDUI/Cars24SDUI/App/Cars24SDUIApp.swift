@@ -14,6 +14,11 @@ struct Cars24SDUIApp: App {
 
     init() {
         launchMode = AppLaunchMode(arguments: ProcessInfo.processInfo.arguments)
+        SDUIPerformanceSignposts.begin(.bootstrapToFirstRender)
+        SDUIPerformanceSignposts.begin(.bootstrapToInteractionReady)
+        if SDUIPerformanceSignposts.shouldScrollToEnd {
+            SDUIPerformanceSignposts.begin(.bootstrapToFullContent)
+        }
         let repository = BundledSDUIScreenRepository()
         _screenStore = State(initialValue: SDUIScreenStore(repository: repository))
     }

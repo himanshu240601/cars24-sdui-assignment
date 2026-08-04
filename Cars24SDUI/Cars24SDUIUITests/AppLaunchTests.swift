@@ -10,8 +10,7 @@ import XCTest
 final class AppLaunchTests: XCTestCase {
     @MainActor
     func testAppRendersTheAvailableV1Sections() {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchApp()
 
         XCTAssertTrue(app.staticTexts["Find your next car"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Cars24 discovery"].exists)
@@ -42,9 +41,7 @@ final class AppLaunchTests: XCTestCase {
 
     @MainActor
     func testStaticBaselineRendersCanonicalContentWithoutTheSDUIPath() {
-        let app = XCUIApplication()
-        app.launchArguments = ["-static-baseline"]
-        app.launch()
+        let app = launchApp(arguments: ["-static-baseline"])
 
         XCTAssertTrue(app.staticTexts["Find your next car"].waitForExistence(timeout: 5))
 
@@ -73,8 +70,7 @@ final class AppLaunchTests: XCTestCase {
 
     @MainActor
     func testFinanceSheetUpdatesTheDeclaredVehicleEMI() {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchApp()
 
         XCTAssertTrue(app.staticTexts["Find your next car"].waitForExistence(timeout: 5))
 
@@ -113,8 +109,17 @@ final class AppLaunchTests: XCTestCase {
         in screen: XCUIElement,
         maxAttempts: Int = 5
     ) {
-        for _ in 0..<maxAttempts where !element.exists {
+        for _ in 0..<maxAttempts where !element.isHittable {
             screen.swipeUp()
         }
+    }
+
+    @MainActor
+    private func launchApp(arguments: [String] = []) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.terminate()
+        app.launchArguments = arguments
+        app.launch()
+        return app
     }
 }
