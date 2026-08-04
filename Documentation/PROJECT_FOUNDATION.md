@@ -19,7 +19,7 @@
 
 The default SDUI launch path reads the bundled V1 fixture through a typed repository and main-actor screen store. It renders all seven declared feed section types: discovery header, two horizontal rails, standard service grid, vehicle rail, highlighted service grid, and promo banner. It preserves native loading, compatibility, retryable-error, and bounded interaction states. The declared finance presentation is a native sheet whose options update the selected declared EMI value through the bounded action dispatcher; the remaining V1 sections are static unless an approved executable action is explicitly implemented.
 
-The application accepts the launch argument -static-baseline. It selects the future static comparison variant; without it, the future SDUI variant is the default. The switch is a developer and benchmark harness, not a user-facing setting.
+The application accepts the launch argument `-static-baseline`. It selects `StaticBaselineHomeView`, a direct SwiftUI source snapshot of the canonical V1 home content; without it, the SDUI variant is the default. The static branch does not attach the SDUI load task, so it does not read the fixture or invoke its decode, registry, validation, renderer, or action-dispatch path. It reuses only visual primitives (tokens, local-media fallback, and section title) and intentionally leaves the initial EMI noninteractive. The switch is a developer and benchmark harness, not a user-facing setting.
 
 `AppLaunchMode` is explicitly `nonisolated`. Argument resolution is pure value logic and must stay independently testable even though this Swift 6 target defaults application code to the main actor. SwiftUI presentation remains main-actor-bound.
 
@@ -32,6 +32,5 @@ The application accepts the launch argument -static-baseline. It selects the fut
 
 ## Deferred work
 
-- Static baseline composition using the same semantic content and local assets, while bypassing SDUI loading and rendering.
 - Performance instrumentation and release benchmark scenarios.
 - Additional design tokens or reusable visual components only when a demonstrated fidelity or maintainability need justifies them.

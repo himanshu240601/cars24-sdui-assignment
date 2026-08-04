@@ -41,12 +41,34 @@ final class AppLaunchTests: XCTestCase {
     }
 
     @MainActor
-    func testStaticBaselineDoesNotLoadTheSDUIFixture() {
+    func testStaticBaselineRendersCanonicalContentWithoutTheSDUIPath() {
         let app = XCUIApplication()
         app.launchArguments = ["-static-baseline"]
         app.launch()
 
-        XCTAssertTrue(app.staticTexts["Screen unavailable"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Find your next car"].waitForExistence(timeout: 5))
+
+        let baseline = app.scrollViews["static-baseline-home"]
+        XCTAssertTrue(baseline.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.scrollViews["sdui-screen-cars24-home"].exists)
+        XCTAssertFalse(app.buttons["sdui-action-finance-2020-tata-nexon"].exists)
+
+        let vehicle = app.descendants(matching: .any)[
+            "static-baseline-item-used-cars-youll-love-2020-tata-nexon"
+        ]
+        reveal(vehicle, in: baseline)
+        XCTAssertTrue(vehicle.exists)
+        XCTAssertTrue(vehicle.label.contains("EMI ₹16,008/month"))
+
+        let highlightedService = app.descendants(matching: .any)[
+            "static-baseline-item-manage-your-vehicle-pay-challan"
+        ]
+        reveal(highlightedService, in: baseline)
+        XCTAssertTrue(highlightedService.exists)
+
+        let promoBanner = app.descendants(matching: .any)["static-baseline-promo-spotify-promo"]
+        reveal(promoBanner, in: baseline, maxAttempts: 10)
+        XCTAssertTrue(promoBanner.exists)
     }
 
     @MainActor
@@ -86,8 +108,12 @@ final class AppLaunchTests: XCTestCase {
     }
 
     @MainActor
-    private func reveal(_ element: XCUIElement, in screen: XCUIElement) {
-        for _ in 0..<5 where !element.exists {
+    private func reveal(
+        _ element: XCUIElement,
+        in screen: XCUIElement,
+        maxAttempts: Int = 5
+    ) {
+        for _ in 0..<maxAttempts where !element.exists {
             screen.swipeUp()
         }
     }

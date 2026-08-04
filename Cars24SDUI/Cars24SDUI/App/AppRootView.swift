@@ -20,7 +20,7 @@ struct AppRootView: View {
                         await screenStore.loadIfNeeded()
                     }
             case .staticBaseline:
-                staticBaselinePlaceholder
+                StaticBaselineHomeView()
             }
         }
     }
@@ -60,14 +60,6 @@ struct AppRootView: View {
             )
             .accessibilityIdentifier("sdui-source-failure")
         }
-    }
-
-    private var staticBaselinePlaceholder: some View {
-        ContentUnavailableView(
-            "Screen unavailable",
-            systemImage: "rectangle.3.group",
-            description: Text(launchMode.unavailableDescription)
-        )
     }
 
     private func retryableFailureView(

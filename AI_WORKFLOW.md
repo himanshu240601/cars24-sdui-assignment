@@ -133,6 +133,20 @@ AI issue caught: the initial UI assertion incorrectly expected child labels insi
 
 Verification: `xcodebuild build-for-testing` compiled the Swift 6 app and both test targets. The unit suite passed all 23 tests, including the canonical fixture's typed highlighted-grid and promo-banner assertions. The focused UI test passed after the accessibility correction, and the final serial UI suite passed all three UI tests on an iPhone 17 Pro simulator.
 
+### Record 10 - direct static performance baseline
+
+Prompt intent: after Milestone 10 approval, implement only a direct native SwiftUI baseline for the required SDUI comparison. It must display the canonical home content while bypassing the SDUI load/decode/render/action path. Do not add a second finance interaction, a generic shared renderer, or new product capability.
+
+Outcome: `-static-baseline` now selects a feature-local `StaticBaselineHomeView` with a direct source-code snapshot of the canonical V1 values and local media tokens. It renders the same seven visual sections, exposes stable baseline-only accessibility identifiers, and keeps the initial Tata NEXON EMI as static text. The branch returns this view directly, so the SDUI load task does not run; the repository read, decoding, registry, validation, renderer, and action dispatcher are not exercised. Small visual primitives are shared only where they do not interpret the SDUI document.
+
+Rejected output or approach: reusing `SDUIScreenRenderer`, decoding the fixture to seed the baseline, duplicating the finance sheet or action state, making the whole screen one hard-coded view body, or adding a generic static-screen framework.
+
+Why rejected: any renderer or decoded model reuse would invalidate the comparison control; a second interactive flow would add unsupported product behavior; and both a monolithic view and a new framework would make a small fixed screen harder to review and maintain.
+
+AI issue caught: the first baseline UI test could not discover the promo banner because the root section identifier replaced the grouped banner identifier. Adding the same accessibility containment boundary used by the SDUI renderer preserves both section and leaf identifiers without altering content or interaction.
+
+Verification: `xcodebuild test -only-testing:Cars24SDUITests` passed all 23 unit tests on an iPhone 17 Pro simulator. The final serial `xcodebuild test -only-testing:Cars24SDUIUITests` run passed all three UI tests: full SDUI feed, finance-sheet update/dismissal, and isolated static baseline.
+
 ## Future records
 
 Future records will be added only after they occur during approved milestones.

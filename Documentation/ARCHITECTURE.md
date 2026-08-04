@@ -18,7 +18,7 @@ JSON action -> action dispatcher -> immutable interaction state or native presen
 
 The typed screen definition keeps scrollable `sections` separate from declared `presentations`. The finance sheet is a presentation, not an invisible row inside the feed, so the renderer will not require a component-ID-specific skip rule.
 
-The static benchmark screen uses the same content, local assets, and reusable leaf views, but bypasses payload loading, decoding, the registry, and dynamic screen-tree rendering.
+The static benchmark screen uses a direct source-code snapshot of the canonical V1 content and the same local-media tokens. It bypasses the SDUI load task, repository read, decode, registry, validation, dynamic screen-tree rendering, and action dispatch. It may reuse only presentation primitives such as style tokens, local-media fallback rendering, and the section-title leaf; those do not interpret the SDUI document. The source duplication is deliberate: updating the canonical fixture requires an explicit matching baseline update so benchmark work cannot silently exercise the SDUI path.
 
 The bundled repository exposes an `async` API even though the current fixture is local. It runs outside the main actor and keeps view lifecycle code independent of the payload mechanism. A detached task, cache, retry policy, or networking layer is not justified for this small immutable resource.
 
@@ -88,7 +88,7 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Milestone 9 exit criteria
+## Milestone 10 exit criteria
 
 - The root injects immutable screen content, bounded interaction state, and a narrow action closure; leaf views do not receive the store.
 - The vehicle rail renders only typed vehicle data and a finance button only when its declared finance action can resolve to a declared sheet.
@@ -101,4 +101,10 @@ This is more than the minimum five visual section types, but intentionally avoid
 - The highlighted service grid uses only its typed title, accent, column count, and item data. It preserves the declared column count at normal text sizes and narrows a three-column payload to two columns only at accessibility Dynamic Type sizes.
 - The promo banner uses its typed text, image reference, and accessibility label. Its canonical V1 instance has no action, so the renderer does not fabricate a CTA or make the banner interactive.
 - Decorative local-media fallbacks remain hidden from VoiceOver; static tiles and banners expose a concise semantic element with stable identifiers for UI tests.
-- No vehicle detail navigation, favourite action, search, profile, full tab navigation, finance calculation, networking, persistence, or screenshot-only controls are introduced. Static-baseline composition and performance measurement remain separate work.
+- `-static-baseline` selects `StaticBaselineHomeView` directly; the SDUI-only `.task` does not run in that branch.
+- The static view contains a local snapshot of the canonical V1 content, renders all seven visual sections, and shares only non-SDUI presentation primitives.
+- The baseline uses no typed SDUI contract models, repository call, screen definition, registry, validation result, `SDUIScreenRenderer`, store dispatch, button action, or finance sheet.
+- The baseline retains the canonical initial EMI as a visual value but intentionally offers no finance interaction, preventing a fake duplicate flow from contaminating the comparison.
+- Static sections use accessibility containment so their stable section identifiers do not suppress the cards, tiles, vehicle, or banner identifiers beneath them.
+- The focused launch test verifies the static root, canonical vehicle EMI, lower highlighted tile, and promo banner while asserting that neither the SDUI root nor its finance action exists.
+- No performance result is claimed yet; release-build instrumentation and a documented measurement protocol remain separate work.
