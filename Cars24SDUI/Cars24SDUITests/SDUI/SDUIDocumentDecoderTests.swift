@@ -77,6 +77,32 @@ struct SDUIDocumentDecoderTests {
             .setSelection(selectionKey: .selectedTenure, optionID: "48-months"),
             .setSelection(selectionKey: .selectedTenure, optionID: "60-months")
         ])
+
+        guard case .highlightedServiceGrid(let highlightedGrid) = document.sections[5] else {
+            Issue.record("The fixture must contain a highlighted service grid at the planned index.")
+            return
+        }
+
+        #expect(highlightedGrid.content.title == "Manage your vehicle")
+        #expect(highlightedGrid.content.accent == .indigo)
+        #expect(highlightedGrid.content.columns == 3)
+        #expect(highlightedGrid.content.items.map(\.title) == [
+            "Pay challan",
+            "Recharge FASTag",
+            "Get insurance",
+            "Cash against car",
+            "Roadside assistance",
+            "Get warranty"
+        ])
+
+        guard case .promoBanner(let banner) = document.sections[6] else {
+            Issue.record("The fixture must contain a promo banner at the planned index.")
+            return
+        }
+
+        #expect(banner.content.title == "Cars24 × Spotify Premium")
+        #expect(banner.content.subtitle == "A membership benefit for your next drive")
+        #expect(banner.content.accessibilityLabel == "Cars24 and Spotify Premium offer")
     }
 
     @Test("An unknown component remains local and known siblings stay valid")

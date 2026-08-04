@@ -4,7 +4,7 @@ This repository contains a deliberately scoped, native SwiftUI implementation of
 
 ## Status
 
-Milestone 8 is complete: the typed vehicle rail, native finance sheet, and bounded JSON action flow are visible and tested. A declared EMI affordance opens the declared sheet, tenure selection updates the displayed JSON EMI value, and native dismissal preserves that selection.
+Milestones 8 and 9 are complete: all seven declared V1 feed section types now render as focused native SwiftUI views. The typed vehicle rail, native finance sheet, and bounded JSON action flow remain the only interactive assignment flow. The highlighted service grid and promotional banner are static, accessible presentations of their validated payload data; no screenshot-only behaviour or new actions were added.
 
 ## Source of truth
 
@@ -44,4 +44,4 @@ The implementation intentionally excludes live APIs, authentication, search, pro
 
 ## Milestone policy
 
-Each milestone is reviewed before the next begins. Milestone 9 is approved to render the remaining typed `highlightedServiceGrid` and `promoBanner` sections without adding screenshot-only behaviour, navigation, or new actions.
+Each milestone is reviewed before the next begins. Milestone 10 has not started; it will compose the direct static-baseline counterpart for the assignment's performance comparison without altering the SDUI contract or product scope.

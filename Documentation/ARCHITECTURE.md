@@ -88,7 +88,7 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Milestone 8 exit criteria
+## Milestone 9 exit criteria
 
 - The root injects immutable screen content, bounded interaction state, and a narrow action closure; leaf views do not receive the store.
 - The vehicle rail renders only typed vehicle data and a finance button only when its declared finance action can resolve to a declared sheet.
@@ -97,4 +97,8 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Tenure rows are full native buttons with a visible and accessible selected state. They retain no local selection state and emit their own JSON-defined actions.
 - The selected tenure persists across native dismissal while active-sheet state is transient.
 - The focused UI test covers the user-visible assignment flow: vehicle EMI action, finance sheet, tenure selection, updated EMI, and native dismissal.
-- No vehicle detail navigation, favourite action, search, profile, full tab navigation, finance calculation, highlighted service grid, or promo banner is introduced in this milestone.
+- All seven known V1 feed section types now route through the exhaustive renderer to small native leaf views.
+- The highlighted service grid uses only its typed title, accent, column count, and item data. It preserves the declared column count at normal text sizes and narrows a three-column payload to two columns only at accessibility Dynamic Type sizes.
+- The promo banner uses its typed text, image reference, and accessibility label. Its canonical V1 instance has no action, so the renderer does not fabricate a CTA or make the banner interactive.
+- Decorative local-media fallbacks remain hidden from VoiceOver; static tiles and banners expose a concise semantic element with stable identifiers for UI tests.
+- No vehicle detail navigation, favourite action, search, profile, full tab navigation, finance calculation, networking, persistence, or screenshot-only controls are introduced. Static-baseline composition and performance measurement remain separate work.

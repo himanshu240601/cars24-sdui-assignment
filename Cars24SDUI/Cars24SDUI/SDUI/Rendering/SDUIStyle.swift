@@ -17,6 +17,8 @@ enum SDUIStyle {
     static let cardCornerRadius: CGFloat = 20
 
     static let brandColor = Color.indigo
+    static let emeraldColor = Color(red: 0.06, green: 0.33, blue: 0.20)
+    static let promoColor = Color(red: 0.04, green: 0.24, blue: 0.13)
     static let contentSurface = Color(uiColor: .secondarySystemBackground)
     static let mutedSurface = Color(uiColor: .tertiarySystemBackground)
     static let borderColor = Color(uiColor: .separator)

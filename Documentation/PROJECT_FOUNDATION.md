@@ -17,7 +17,7 @@
 
 ## Foundation behaviour
 
-The default SDUI launch path reads the bundled V1 fixture through a typed repository and main-actor screen store. It renders the approved discovery header, two horizontal rail types, standard service grid, and vehicle rail while preserving native loading, compatibility, retryable-error, and bounded interaction states. The declared finance presentation is a native sheet whose options update the selected declared EMI value through the bounded action dispatcher.
+The default SDUI launch path reads the bundled V1 fixture through a typed repository and main-actor screen store. It renders all seven declared feed section types: discovery header, two horizontal rails, standard service grid, vehicle rail, highlighted service grid, and promo banner. It preserves native loading, compatibility, retryable-error, and bounded interaction states. The declared finance presentation is a native sheet whose options update the selected declared EMI value through the bounded action dispatcher; the remaining V1 sections are static unless an approved executable action is explicitly implemented.
 
 The application accepts the launch argument -static-baseline. It selects the future static comparison variant; without it, the future SDUI variant is the default. The switch is a developer and benchmark harness, not a user-facing setting.
 
@@ -32,7 +32,6 @@ The application accepts the launch argument -static-baseline. It selects the fut
 
 ## Deferred work
 
-- Native renderers for the highlighted service grid and promo banner.
-- Additional design tokens and reusable visual components justified by those renderers.
-- Static baseline composition.
+- Static baseline composition using the same semantic content and local assets, while bypassing SDUI loading and rendering.
 - Performance instrumentation and release benchmark scenarios.
+- Additional design tokens or reusable visual components only when a demonstrated fidelity or maintainability need justifies them.

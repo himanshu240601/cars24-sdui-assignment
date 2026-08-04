@@ -119,6 +119,20 @@ AI issue caught: the first UI test queried a title that appears both in the fina
 
 Verification: `xcodebuild build-for-testing` compiled the Swift 6 application and both test targets. The simulator unit suite passed all 23 tests. The focused UI path passed after the selector correction: tap declared EMI action, open the native sheet, select 36 months, observe the declared EMI value, swipe the sheet down, and retain the updated vehicle EMI. The final serial UI suite passed all three UI tests on an iPhone 17 Pro simulator.
 
+### Record 9 - highlighted service grid and promotional banner
+
+Prompt intent: after Milestones 8 and 9 approval, render only the remaining typed `highlightedServiceGrid` and `promoBanner` feed sections. Do not change the contract, repository, action vocabulary, finance flow, navigation, or introduce screenshot-only controls.
+
+Outcome: the renderer now routes the two existing component types to separate, focused SwiftUI leaves because their visual structures differ materially. The highlighted grid honors its typed title, accent, column count, and items; it retains the declared layout at normal Dynamic Type sizes and uses a two-column readability fallback at accessibility sizes. The promo banner uses its typed title, optional subtitle, image reference, and accessibility label. Both use deterministic decorative media fallbacks while original artwork is absent. The V1 banner declares no executable action, so it remains static rather than gaining a fabricated CTA.
+
+Rejected output or approach: a generic configurable section engine, a new action handler for every optional model action, a promotional CTA, screenshot-derived navigation, remote image loading, additional fixtures, and a static-baseline implementation in the same milestone.
+
+Why rejected: the existing typed contract already distinguishes the two layouts; an abstraction would hide their simple semantics. An optional action field is not authorization to add client behaviour, and the assignment does not require remote media, extra flows, or benchmark implementation in this increment.
+
+AI issue caught: the initial UI assertion incorrectly expected child labels inside accessibility-grouped static tiles and banners to remain individually queryable. The test was corrected to scroll the identified feed and assert the single semantic accessibility elements using their stable identifiers. This matches the VoiceOver hierarchy instead of testing an implementation detail of `Text` subviews.
+
+Verification: `xcodebuild build-for-testing` compiled the Swift 6 app and both test targets. The unit suite passed all 23 tests, including the canonical fixture's typed highlighted-grid and promo-banner assertions. The focused UI test passed after the accessibility correction, and the final serial UI suite passed all three UI tests on an iPhone 17 Pro simulator.
+
 ## Future records
 
 Future records will be added only after they occur during approved milestones.

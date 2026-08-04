@@ -21,6 +21,23 @@ final class AppLaunchTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Used car loan"].exists)
         XCTAssertTrue(app.staticTexts["Car check services"].exists)
         XCTAssertTrue(app.staticTexts["New car PDI"].exists)
+
+        let screen = app.scrollViews["sdui-screen-cars24-home"]
+        XCTAssertTrue(screen.waitForExistence(timeout: 5))
+
+        let highlightedGridTitle = app.staticTexts["Manage your vehicle"]
+        reveal(highlightedGridTitle, in: screen)
+        XCTAssertTrue(highlightedGridTitle.exists)
+
+        let highlightedService = app.descendants(matching: .any)[
+            "sdui-item-manage-your-vehicle-pay-challan"
+        ]
+        reveal(highlightedService, in: screen)
+        XCTAssertTrue(highlightedService.exists)
+
+        let promoBanner = app.descendants(matching: .any)["sdui-promo-spotify-promo"]
+        reveal(promoBanner, in: screen)
+        XCTAssertTrue(promoBanner.exists)
     }
 
     @MainActor
