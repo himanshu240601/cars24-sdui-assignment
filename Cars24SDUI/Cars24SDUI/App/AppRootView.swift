@@ -33,13 +33,8 @@ struct AppRootView: View {
             ProgressView("Loading screen")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .accessibilityIdentifier("sdui-loading")
-        case .content:
-            ContentUnavailableView(
-                "Screen definition loaded",
-                systemImage: "checkmark.rectangle",
-                description: Text("The native SDUI renderer will be added in a later milestone.")
-            )
-            .accessibilityIdentifier("sdui-renderer-pending")
+        case .content(let definition):
+            SDUIScreenRenderer(definition: definition)
         case .unsupportedSchema(let major):
             ContentUnavailableView(
                 "Unsupported screen version",

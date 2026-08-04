@@ -8,8 +8,8 @@
 import Foundation
 
 /// Converts a tolerant wire component into a concrete, immutable native model.
-/// This is a model registry, not a view-factory registry: SwiftUI rendering is
-/// deliberately introduced in a later milestone.
+/// This is a model registry, not a view-factory registry. The SwiftUI renderer
+/// consumes the immutable models it produces.
 nonisolated struct SDUIComponentRegistry: Sendable {
     func makeSection(from raw: SDUIRawComponent) -> SDUISection {
         guard let type = SDUISectionType(rawValue: raw.type) else {

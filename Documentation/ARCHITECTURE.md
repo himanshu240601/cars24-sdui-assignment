@@ -43,7 +43,7 @@ The bundled repository exposes an `async` API even though the current fixture is
 | Repository | Resolves the bundled payload, decodes it, and maps source/compatibility/validation outcomes. It has no UI knowledge. |
 | Decoding and validation | Converts the wire document into safe typed sections/presentations and captures invalid content locally. |
 | Component registry | Maps known server component names to component kinds and validation rules. |
-| Renderer | Turns a validated component model into a native SwiftUI view. |
+| Renderer | Turns immutable validated models into native SwiftUI views through an exhaustive section switch. It has no loading, decoding, or action-dispatch responsibility. |
 | Action dispatcher | Validates and handles a finite JSON action vocabulary. |
 | Screen state | Owns load state, selected tenure, and sheet presentation. It never mutates the decoded document. |
 | Leaf components | Render immutable content and emit supplied actions. They do not decode JSON or hold page-specific logic. |
@@ -88,10 +88,11 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Milestone 4 exit criteria
+## Milestone 5 exit criteria
 
-- The default SDUI launch path loads the bundled V1 fixture through the repository and screen store.
-- Loading, unsupported-major, invalid-document, and source-read failures are distinct native root states.
-- Invalid-document and source-read states offer a manual retry; no automatic retry or cache exists.
-- Static-baseline launch does not trigger SDUI payload loading or decoding.
-- No assignment renderer, action dispatcher, finance sheet, or visual component is introduced yet.
+- The renderer consumes only immutable `SDUIScreenDefinition` values from the content state.
+- The discovery header, illustrated-action rail, and product rail use native SwiftUI views with stable server IDs.
+- Unknown and invalid payload nodes render compact local fallbacks without exposing raw server diagnostics.
+- Known V1 types whose native views are not yet approved are not mislabelled as unsupported.
+- Rail cards remain noninteractive until JSON actions have an approved dispatcher.
+- No service grid, vehicle card, finance sheet, navigation, search, or screenshot-only control is introduced.

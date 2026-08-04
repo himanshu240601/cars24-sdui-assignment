@@ -69,9 +69,21 @@ Why rejected: direct reads would couple I/O, parsing, and UI lifecycle; extra la
 
 Verification: `xcodebuild build-for-testing` compiled the application and test targets under Swift 6. A host-side execution of the production repository read `home-v1.json` from the built app bundle, preserved a typed missing-resource error, and drove the main-actor store to content. Simulator XCTest execution remains pending because the local CoreSimulator service is unavailable before tests start.
 
+### Record 5 - first native SDUI renderer subset
+
+Prompt intent: after Milestone 5 approval, render only the typed discovery header, illustrated-action rail, and product rail, plus local unknown/invalid fallbacks. Do not build the remaining section types, actions, finance sheet, navigation, or screenshot-only controls.
+
+Outcome: `SDUIScreenRenderer` owns one vertical `ScrollView` with an exhaustive typed-section switch. The approved sections have small semantic SwiftUI leaf views and horizontally lazy rails with stable server IDs. Local asset tokens use a decorative SF Symbol placeholder while original media is absent. Known-but-deferred V1 types are not incorrectly presented as unsupported.
+
+Rejected output or approach: a second renderer registry, `AnyView`, a generic rail/layout engine, hard-coded screenshot images, fake tappable cards, a fixture-selection application feature, and a complete seven-section renderer.
+
+Why rejected: the existing typed model registry is the only registry needed; generic visual abstractions would obscure two distinct rail layouts; screenshot media is not assignment source; no JSON action is executable yet; and the remaining renderers exceed the approved milestone size.
+
+Verification: `xcodebuild build-for-testing` compiled the application and test targets under Swift 6 after the renderer was introduced. The UI smoke test now asserts decoded header and rail text rather than a renderer-pending placeholder. Simulator XCTest execution remains pending because the local CoreSimulator service is unavailable before tests start.
+
 ## Future records
 
-Record 3 and later entries will be added only after they occur during approved milestones.
+Future records will be added only after they occur during approved milestones.
 
 ## Verification strategy for AI-assisted changes
 
