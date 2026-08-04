@@ -40,11 +40,13 @@ private struct SDUISectionRenderer: View {
             SDUIIllustratedActionRailSection(component: component)
         case .productRail(let component):
             SDUIProductRailSection(component: component)
+        case .serviceGrid(let component):
+            SDUIServiceGridSection(component: component)
         case .unsupported(let node):
             SDUISectionFallbackView(id: node.id, kind: .unsupported)
         case .invalid(let node):
             SDUISectionFallbackView(id: node.id, kind: .invalid)
-        case .serviceGrid, .vehicleRail, .highlightedServiceGrid, .promoBanner:
+        case .vehicleRail, .highlightedServiceGrid, .promoBanner:
             // These are known V1 types whose native renderers are deliberately
             // deferred to later approved milestones. They are not unsupported
             // payload nodes and must not be labelled as such.

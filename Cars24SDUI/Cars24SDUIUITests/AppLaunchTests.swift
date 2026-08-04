@@ -19,6 +19,8 @@ final class AppLaunchTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["All used cars"].exists)
         XCTAssertTrue(app.staticTexts["Get loans"].exists)
         XCTAssertTrue(app.staticTexts["Used car loan"].exists)
+        XCTAssertTrue(app.staticTexts["Car check services"].exists)
+        XCTAssertTrue(app.staticTexts["New car PDI"].exists)
     }
 
     @MainActor

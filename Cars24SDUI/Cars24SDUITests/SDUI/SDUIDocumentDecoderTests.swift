@@ -30,6 +30,22 @@ struct SDUIDocumentDecoderTests {
         ])
         #expect(document.presentations.count == 1)
 
+        guard case .serviceGrid(let grid) = document.sections[3] else {
+            Issue.record("The fixture must contain a service grid at the planned index.")
+            return
+        }
+
+        #expect(grid.content.title == "Car check services")
+        #expect(grid.content.columns == 3)
+        #expect(grid.content.items.map(\.id) == [
+            "new-car-pdi",
+            "used-car-check",
+            "vehicle-history",
+            "check-challan",
+            "car-insurance",
+            "odometer-tampering"
+        ])
+
         guard case .vehicleRail(let rail) = document.sections[4] else {
             Issue.record("The fixture must contain a vehicle rail at the planned index.")
             return

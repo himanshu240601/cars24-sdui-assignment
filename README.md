@@ -4,7 +4,7 @@ This repository contains a deliberately scoped, native SwiftUI implementation of
 
 ## Status
 
-Milestone 5 is complete: the app now renders the typed discovery header, illustrated-action rail, and product rail through a pure SwiftUI SDUI renderer. Unknown and invalid nodes have local fallbacks; remaining known V1 section renderers are deliberately deferred to later milestones.
+Milestone 6 is complete: the app renders the typed discovery header, two rails, and standard service grid through a pure SwiftUI SDUI renderer. Unknown and invalid nodes have local fallbacks; remaining known V1 section renderers are deliberately deferred to later milestones.
 
 ## Source of truth
 
@@ -44,4 +44,4 @@ The implementation intentionally excludes live APIs, authentication, search, pro
 
 ## Milestone policy
 
-Each milestone is reviewed before the next begins. The next milestone may add the service-grid renderer and supporting visual primitives, but will not add screenshot-only product behaviour.
+Each milestone is reviewed before the next begins. The next milestone may add the vehicle-rail renderer; its assignment-defined finance interaction remains a separate approved increment.

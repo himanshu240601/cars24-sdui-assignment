@@ -81,6 +81,18 @@ Why rejected: the existing typed model registry is the only registry needed; gen
 
 Verification: `xcodebuild build-for-testing` compiled the application and test targets under Swift 6 after the renderer was introduced. The UI smoke test now asserts decoded header and rail text rather than a renderer-pending placeholder. Simulator XCTest execution remains pending because the local CoreSimulator service is unavailable before tests start.
 
+### Record 6 - standard service-grid renderer
+
+Prompt intent: after Milestone 6 approval, render only the typed `serviceGrid` section with a small native tile primitive. Do not change the contract/data layers or add the highlighted grid, vehicle rail, promotions, actions, finance sheet, navigation, or screenshot-only controls.
+
+Outcome: the typed renderer now routes `serviceGrid` to a `LazyVGrid` driven by the already validated two-or-three-column payload value. At accessibility Dynamic Type sizes, a three-column grid narrows to two columns so labels can remain readable. Tiles use stable item IDs, semantic system surfaces, deterministic local-media placeholders, and no interaction before the approved action dispatcher exists.
+
+Rejected output or approach: a generic grid engine, an adaptive layout that ignored the payload column count, another schema or validation layer, a fixture-selection launch feature, fake tappable tiles, and rendering the visually related highlighted grid in the same milestone.
+
+Why rejected: the existing typed contract is sufficient; the normal layout must honor server configuration; the renderer has no need to mutate its input; test-only launch configuration is not product scope; and larger visual/action increments would make the review boundary unclear.
+
+Verification: `xcodebuild build-for-testing` compiled the application and test targets under Swift 6. The primary fixture test now asserts the exact typed service-grid input, while the existing invalid-grid fixture continues to prove invalid column counts localize safely. The UI smoke test adds the grid title and first item. An `xcodebuild test` run began on an iPhone 16 test clone, but the local CoreSimulator service crashed before Xcode finalized its result bundle; no runtime XCTest pass is claimed.
+
 ## Future records
 
 Future records will be added only after they occur during approved milestones.

@@ -88,11 +88,13 @@ This is more than the minimum five visual section types, but intentionally avoid
 - Arbitrary layouts, arbitrary style properties, remote code execution, or formula evaluation.
 - A second platform before a complete first-platform implementation.
 
-## Milestone 5 exit criteria
+## Milestone 6 exit criteria
 
 - The renderer consumes only immutable `SDUIScreenDefinition` values from the content state.
-- The discovery header, illustrated-action rail, and product rail use native SwiftUI views with stable server IDs.
+- The discovery header, illustrated-action rail, product rail, and standard service grid use native SwiftUI views with stable server IDs.
+- The service grid uses its validated two- or three-column payload configuration, narrowing a three-column layout only at accessibility Dynamic Type sizes to preserve readable labels.
+- Grid items remain static and let their height grow with Dynamic Type; decorative media remains hidden from VoiceOver.
 - Unknown and invalid payload nodes render compact local fallbacks without exposing raw server diagnostics.
 - Known V1 types whose native views are not yet approved are not mislabelled as unsupported.
-- Rail cards remain noninteractive until JSON actions have an approved dispatcher.
-- No service grid, vehicle card, finance sheet, navigation, search, or screenshot-only control is introduced.
+- Cards remain noninteractive until JSON actions have an approved dispatcher.
+- No highlighted service grid, vehicle card, finance sheet, navigation, search, or screenshot-only control is introduced.
