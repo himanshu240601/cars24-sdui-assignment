@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "screenID": "cars24-home-with-invalid-component",
+  "sections": [
+    {
+      "id": "discovery-header",
+      "type": "discoveryHeader",
+      "props": {
+        "title": "Find your next car",
+        "subtitle": "Cars24 discovery"
+      }
+    },
+    {
+      "id": "invalid-service-grid",
+      "type": "serviceGrid",
+      "props": {
+        "title": "Car check services",
+        "columns": 4,
+        "items": [
+          {
+            "id": "new-car-pdi",
+            "title": "New car PDI"
+          }
+        ]
+      }
+    },
+    {
+      "id": "loan-products",
+      "type": "productRail",
+      "props": {
+        "title": "Get loans",
+        "items": [
+          {
+            "id": "used-car-loan",
+            "title": "Used car loan",
+            "imageName": "product-used-car-loan"
+          }
+        ]
+      }
+    }
+  ]
+}

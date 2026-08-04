@@ -13,6 +13,7 @@ It must not become a generic layout language or remote code-execution surface.
 | schemaVersion | Major compatibility version. | Required; V1 accepts major version 1 only. |
 | screenID | Stable identifier for the payload/screen. | Required. |
 | sections | Ordered top-level SDUI components. | Required; each entry has a stable component ID. |
+| presentations | Declared non-scrolling SDUI presentations. | Optional; V1 uses it for financeSheet. IDs remain unique across sections and presentations. |
 | metadata | Optional non-rendering payload metadata. | Ignored safely when unknown. |
 
 ## Common component fields
@@ -23,9 +24,9 @@ It must not become a generic layout language or remote code-execution surface.
 | type | Semantic component type. | Required; must be a declared V1 type or become an unsupported node. |
 | props | Type-specific content and presentation data. | Required for known components; validated before rendering. |
 | actions | Declared user actions associated with the component or its items. | Optional; only declared action kinds are accepted. |
-| variant | Constrained named visual variant. | Optional; no raw colour, font, spacing, or layout expressions. |
+| variant | Constrained named visual variant. | Optional; V1 accepts standard, featured, or branded only—never raw colour, font, spacing, or layout expressions. |
 
-## Supported V1 component types
+## Supported V1 scrollable component types
 
 | Type | Purpose | Examples of permitted props |
 |---|---|---|
@@ -36,18 +37,26 @@ It must not become a generic layout language or remote code-execution surface.
 | vehicleRail | Horizontal vehicle-card collection. | Title, trailing label, vehicle items, card actions. |
 | highlightedServiceGrid | Coloured service grouping. | Title, accent variant, grid items. |
 | promoBanner | Full-width promotional visual. | Image reference, accessibility label, optional action. |
-| financeSheet | Sheet title, tenure options, selected-state binding, finance display mapping. | Tenure options and display values only; no executable formula. |
+
+## Supported V1 presentation types
+
+| Type | Purpose | Examples of permitted props |
+|---|---|---|
+| financeSheet | Assignment-required sheet content. | Title, selectedTenure binding, initial option, tenure options, and display values only. |
+
+`financeSheet` is intentionally not a scrollable section. A vehicle references its declared sheet through `finance.sheetID`, and `presentSheet` targets the same ID.
 
 ## Actions
 
 | Action kind | Valid effect | Explicitly not allowed |
 |---|---|---|
-| setSelection | Set a validated named selection to a declared option. | Arbitrary state mutation. |
-| presentSheet | Present a declared sheet identifier. | Arbitrary view presentation. |
+| setSelection | Set `selectedTenure` to a declared `optionID`. | Arbitrary state mutation. |
+| presentSheet | Present a declared `sheetID`. | Arbitrary view presentation. |
 | dismissSheet | Dismiss the active declared sheet. | Dismissing unrelated system UI. |
-| navigate | Emit a declared application route if a real route is implemented. | Arbitrary URL or deep link execution. |
 
-The initial required flow is vehicle EMI affordance -> presentSheet -> select tenure -> update the finance display. The renderer never contains a component-ID-specific rule for that behaviour.
+Unknown action types and malformed known actions decode as safe unavailable actions with a diagnostic. They are never executable client instructions.
+
+The initial required flow is vehicle EMI affordance -> presentSheet -> select tenure -> update the finance display. The vehicle references the sheet contractually; the renderer never contains a component-ID-specific rule for that behaviour.
 
 ## State binding
 
@@ -57,7 +66,6 @@ V1 supports only the small interaction state needed by the assignment:
 |---|---|---|
 | selectedTenure | Screen interaction state | Selects a declared finance display value. |
 | activeSheetID | Screen interaction state | Controls the native finance sheet presentation. |
-| navigationRoute | Screen interaction state | Stores a declared in-scope navigation intent when used. |
 
 The decoded document is immutable. State never writes back into the payload.
 
@@ -66,12 +74,15 @@ The decoded document is immutable. State never writes back into the payload.
 | Condition | Required behaviour |
 |---|---|
 | Unknown component type | Preserve its ID/type for diagnostics and render an unsupported-component fallback. |
+| Unknown presentation type | Preserve its ID/type for diagnostics and render an unsupported-presentation fallback if invoked. |
 | Known component with invalid props | Render a local invalid-content fallback and continue rendering sibling sections. |
 | Unknown optional field | Ignore safely. |
 | Unknown action type | Safe no-op plus debug diagnostic. |
-| Duplicate component ID | Treat the document as invalid. |
+| Duplicate component ID across sections/presentations | Treat the document as invalid. |
 | Unsupported schema major version | Present a screen-level compatibility fallback. |
 | Invalid root document | Present a screen-level error/retry state. |
+
+V1 validates that a vehicle's finance action targets a declared finance sheet and that a tenure-selection action targets an option declared by that sheet. A missing target invalidates only the affected known node; it does not crash the screen.
 
 ## Compatibility policy
 

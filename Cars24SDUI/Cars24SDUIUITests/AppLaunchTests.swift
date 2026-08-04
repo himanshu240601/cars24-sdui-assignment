@@ -13,6 +13,6 @@ final class AppLaunchTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
 
-        XCTAssertTrue(app.otherElements["app-root"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Screen unavailable"].waitForExistence(timeout: 5))
     }
 }

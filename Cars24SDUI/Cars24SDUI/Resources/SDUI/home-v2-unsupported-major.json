@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 2,
+  "screenID": "cars24-home",
+  "sections": [
+    {
+      "id": "discovery-header",
+      "type": "discoveryHeader",
+      "props": {
+        "title": "Find your next car"
+      }
+    }
+  ]
+}

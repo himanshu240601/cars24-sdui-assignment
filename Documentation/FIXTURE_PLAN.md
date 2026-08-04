@@ -4,17 +4,19 @@
 
 Payload fixtures make the SDUI contract testable, support the required recording, and keep the static-versus-SDUI comparison deterministic.
 
-No JSON fixture is created in Milestone 1. This document defines the fixture matrix before implementation.
+The fixtures below are bundled with the app target in Milestone 3. They contain only local asset tokens, never remote URLs or screenshot-derived image files.
 
 ## Planned fixture matrix
 
-| Planned file | Purpose | Required proof |
+| File | Status and purpose | Required proof |
 |---|---|---|
-| home-v1.json | Primary assignment screen. | At least five section types, horizontal rail, vertical grid, vehicle EMI, and finance-sheet action. |
-| home-v1-unknown-component.json | Valid primary screen plus an unsupported node. | Unknown component is visible/safe and valid siblings still render. |
-| home-v1-invalid-component.json | Valid primary screen plus a known node with invalid props. | Failure is isolated to the invalid component. |
-| home-v2-unsupported-major.json | Incompatible root schema version. | Screen-level compatibility fallback. |
-| future-screen-practice.json | A deliberately different composition using existing component types. | Practice for the surprise-screen coverage discussion. |
+| home-v1.json | Implemented canonical assignment composition. | Seven visual section types, horizontal rails, vertical grids, vehicle finance intent, and finance-sheet declaration. |
+| home-v1-unknown-component.json | Implemented compatibility fixture. | Unknown component is local while valid siblings remain typed. |
+| home-v1-invalid-component.json | Implemented local-validation fixture. | A known node with invalid grid props becomes a local invalid node. |
+| home-v1-invalid-root.json | Implemented root-validation fixture. | Duplicate IDs produce a screen-level invalid-document outcome. |
+| home-v2-unsupported-major.json | Implemented compatibility-version fixture. | Unsupported schema major produces a screen-level compatibility outcome. |
+| malformed JSON data | Implemented inline in a decoder test. | Syntax failure remains distinct from semantic root validation. |
+| future-screen-practice.json | Deferred until the coverage exercise. | A deliberately different composition using existing component types. |
 
 ## Primary content parity
 

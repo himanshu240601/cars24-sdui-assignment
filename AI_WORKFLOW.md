@@ -45,6 +45,18 @@ AI failure caught: the first implementation allowed the pure `AppLaunchMode` val
 
 Correction and verification: declare the pure launch-mode type `nonisolated`, preserving main-actor isolation for SwiftUI while keeping argument parsing independently testable. `xcodebuild test` passed on an iPhone 16 simulator after the correction.
 
+### Record 3 - typed SDUI contract and fixtures
+
+Prompt intent: implement only the V1 wire contract, validation outcomes, and deterministic bundled fixtures after Milestone 3 approval; do not create a renderer or assignment screen.
+
+Outcome: the app now decodes a tolerant raw document, maps known types through a typed registry, preserves unknown nodes, isolates invalid known nodes, and distinguishes compatible, unsupported-schema, and invalid-document outcomes. Finance content is a declared presentation rather than an invisible feed section.
+
+Rejected output or approach: direct tagged-enum decoding into view models, raw dictionaries in SwiftUI, a generic layout/style DSL, and an inline `financeSheet` section.
+
+Why rejected: direct tagged-enum decoding makes an unknown future component fail the entire payload; raw dictionaries would leak wire concerns into views; a generic DSL exceeds the assignment; and an inline sheet would force renderer-specific hiding logic.
+
+Verification: ten deterministic decoder tests cover the primary fixture, unknown component, invalid known component, incompatible major version, duplicate root IDs, malformed data, tolerated unknown fields/actions, malformed action shapes, complete action vocabulary, and a missing finance reference. The suite also retains two foundation unit tests and one UI launch test. A simulator build confirmed each JSON fixture is copied into the app bundle.
+
 ## Future records
 
 Record 3 and later entries will be added only after they occur during approved milestones.

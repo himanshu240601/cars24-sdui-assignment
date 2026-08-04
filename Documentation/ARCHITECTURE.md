@@ -12,9 +12,11 @@ The written assignment adds the required tenure selector and bottom sheet. Those
 
 ## Architectural flow
 
-Local payload source -> asynchronous repository -> decode and validate -> typed screen definition -> component registry -> native SwiftUI renderer.
+Local payload source -> asynchronous repository -> tolerant wire decode -> registry and validation -> immutable typed screen definition -> native SwiftUI renderer.
 
 JSON action -> action dispatcher -> immutable interaction state or native presentation -> SwiftUI update.
+
+The typed screen definition keeps scrollable `sections` separate from declared `presentations`. The finance sheet is a presentation, not an invisible row inside the feed, so the renderer will not require a component-ID-specific skip rule.
 
 The static benchmark screen uses the same content, local assets, and reusable leaf views, but bypasses payload loading, decoding, the registry, and dynamic screen-tree rendering.
 
@@ -37,7 +39,7 @@ The static benchmark screen uses the same content, local assets, and reusable le
 |---|---|
 | App composition | Constructs the repository, registry, and screen store. Selects static or SDUI launch mode for development and benchmarks. |
 | Data source | Reads the bundled payload asynchronously. It has no UI knowledge. |
-| Decoding and validation | Converts the wire document into safe typed component models and captures invalid content locally. |
+| Decoding and validation | Converts the wire document into safe typed sections/presentations and captures invalid content locally. |
 | Component registry | Maps known server component names to component kinds and validation rules. |
 | Renderer | Turns a validated component model into a native SwiftUI view. |
 | Action dispatcher | Validates and handles a finite JSON action vocabulary. |
@@ -54,9 +56,9 @@ The static benchmark screen uses the same content, local assets, and reusable le
 - Support Dynamic Type, VoiceOver, Increase Contrast, Reduce Motion, safe areas, and adequate touch targets.
 - Treat decorative media as decorative for accessibility; expose vehicle and finance data in a concise logical order.
 
-## Planned component inventory
+## V1 component inventory
 
-The first payload will contain only the following semantic component types:
+The first payload contains only the following scrollable semantic component types:
 
 | Component type | Purpose |
 |---|---|
@@ -67,7 +69,12 @@ The first payload will contain only the following semantic component types:
 | vehicleRail | Horizontal vehicle cards with price and EMI information. |
 | highlightedServiceGrid | Visually distinct coloured service grouping or promotional utility section. |
 | promoBanner | Optional full-width promotional visual section. |
-| financeSheet | Assignment-required sheet content with a tenure selector. |
+
+The assignment-required finance sheet is declared separately as a presentation:
+
+| Presentation type | Purpose |
+|---|---|
+| financeSheet | Sheet content, tenure options, initial selection, and JSON-defined selection actions. |
 
 This is more than the minimum five visual section types, but intentionally avoids generic containers, arbitrary styles, and unused component families.
 

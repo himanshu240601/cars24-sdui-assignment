@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "screenID": "cars24-home-invalid-root",
+  "sections": [
+    {
+      "id": "duplicate-section",
+      "type": "discoveryHeader",
+      "props": {
+        "title": "First section"
+      }
+    },
+    {
+      "id": "duplicate-section",
+      "type": "productRail",
+      "props": {
+        "title": "Second section",
+        "items": [
+          {
+            "id": "loan",
+            "title": "Loan",
+            "imageName": "product-loan"
+          }
+        ]
+      }
+    }
+  ]
+}

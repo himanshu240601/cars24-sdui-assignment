@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "screenID": "cars24-home-with-unknown-component",
+  "sections": [
+    {
+      "id": "discovery-header",
+      "type": "discoveryHeader",
+      "variant": "branded",
+      "props": {
+        "title": "Find your next car",
+        "subtitle": "Cars24 discovery"
+      }
+    },
+    {
+      "id": "seasonal-offer",
+      "type": "seasonalOfferCarousel",
+      "props": {
+        "campaignID": "monsoon-2026",
+        "cards": [
+          {
+            "headline": "Unknown to V1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "loan-products",
+      "type": "productRail",
+      "props": {
+        "title": "Get loans",
+        "items": [
+          {
+            "id": "used-car-loan",
+            "title": "Used car loan",
+            "imageName": "product-used-car-loan"
+          },
+          {
+            "id": "loan-against-car",
+            "title": "Loan against car",
+            "imageName": "product-loan-against-car"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "screenID": "cars24-home",
+  "metadata": {
+    "fixture": "home-v1",
+    "contentRevision": 1
+  },
+  "sections": [
+    {
+      "id": "discovery-header",
+      "type": "discoveryHeader",
+      "variant": "branded",
+      "props": {
+        "title": "Find your next car",
+        "subtitle": "Cars24 discovery",
+        "symbolName": "car.fill"
+      }
+    },
+    {
+      "id": "buy-actions",
+      "type": "illustratedActionRail",
+      "props": {
+        "title": "Buy car",
+        "badgeText": "Up to ₹80,000 off",
+        "items": [
+          {
+            "id": "all-used-cars",
+            "title": "All used cars",
+            "imageName": "illustration-all-used-cars"
+          },
+          {
+            "id": "budget-used-cars",
+            "title": "Budget used cars",
+            "imageName": "illustration-budget-used-cars"
+          },
+          {
+            "id": "premium-used-cars",
+            "title": "Premium used cars",
+            "imageName": "illustration-premium-used-cars"
+          }
+        ]
+      }
+    },
+    {
+      "id": "loan-products",
+      "type": "productRail",
+      "props": {
+        "title": "Get loans",
+        "items": [
+          {
+            "id": "used-car-loan",
+            "title": "Used car loan",
+            "imageName": "product-used-car-loan"
+          },
+          {
+            "id": "loan-against-car",
+            "title": "Loan against car",
+            "imageName": "product-loan-against-car"
+          },
+          {
+            "id": "personal-loan",
+            "title": "Personal loan",
+            "imageName": "product-personal-loan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "car-check-services",
+      "type": "serviceGrid",
+      "props": {
+        "title": "Car check services",
+        "columns": 3,
+        "items": [
+          {
+            "id": "new-car-pdi",
+            "title": "New car PDI",
+            "imageName": "service-new-car-pdi"
+          },
+          {
+            "id": "used-car-check",
+            "title": "Used car check",
+            "imageName": "service-used-car-check"
+          },
+          {
+            "id": "vehicle-history",
+            "title": "Vehicle history",
+            "imageName": "service-vehicle-history"
+          },
+          {
+            "id": "check-challan",
+            "title": "Check challan",
+            "imageName": "service-check-challan"
+          },
+          {
+            "id": "car-insurance",
+            "title": "Check car insurance",
+            "imageName": "service-car-insurance"
+          },
+          {
+            "id": "odometer-tampering",
+            "title": "Odometer tampering",
+            "imageName": "service-odometer-tampering"
+          }
+        ]
+      }
+    },
+    {
+      "id": "used-cars-youll-love",
+      "type": "vehicleRail",
+      "props": {
+        "title": "Used cars you'll love",
+        "vehicles": [
+          {
+            "id": "2020-tata-nexon",
+            "title": "2020 Tata NEXON",
+            "subtitle": "XZ Plus LUXS Jet",
+            "imageName": "vehicle-tata-nexon",
+            "priceText": "₹6.25 lakh",
+            "metadata": [
+              "55,986 km",
+              "Petrol",
+              "Manual",
+              "HR01"
+            ],
+            "finance": {
+              "sheetID": "finance-options",
+              "action": {
+                "type": "presentSheet",
+                "sheetID": "finance-options"
+              }
+            }
+          },
+          {
+            "id": "2015-maruti-wagonr",
+            "title": "2015 Maruti WagonR",
+            "subtitle": "VXI",
+            "imageName": "vehicle-maruti-wagonr",
+            "priceText": "₹1.90 lakh",
+            "metadata": [
+              "49,284 km",
+              "Petrol",
+              "Manual",
+              "HR26"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "manage-your-vehicle",
+      "type": "highlightedServiceGrid",
+      "variant": "featured",
+      "props": {
+        "title": "Manage your vehicle",
+        "accent": "indigo",
+        "columns": 3,
+        "items": [
+          {
+            "id": "pay-challan",
+            "title": "Pay challan",
+            "imageName": "manage-pay-challan"
+          },
+          {
+            "id": "recharge-fastag",
+            "title": "Recharge FASTag",
+            "imageName": "manage-recharge-fastag"
+          },
+          {
+            "id": "get-insurance",
+            "title": "Get insurance",
+            "imageName": "manage-get-insurance"
+          },
+          {
+            "id": "cash-against-car",
+            "title": "Cash against car",
+            "imageName": "manage-cash-against-car"
+          },
+          {
+            "id": "roadside-assistance",
+            "title": "Roadside assistance",
+            "imageName": "manage-roadside-assistance"
+          },
+          {
+            "id": "get-warranty",
+            "title": "Get warranty",
+            "imageName": "manage-get-warranty"
+          }
+        ]
+      }
+    },
+    {
+      "id": "spotify-promo",
+      "type": "promoBanner",
+      "props": {
+        "title": "Cars24 × Spotify Premium",
+        "subtitle": "A membership benefit for your next drive",
+        "imageName": "promo-spotify-premium",
+        "accessibilityLabel": "Cars24 and Spotify Premium offer"
+      }
+    }
+  ],
+  "presentations": [
+    {
+      "id": "finance-options",
+      "type": "financeSheet",
+      "props": {
+        "title": "Choose your loan tenure",
+        "selectionKey": "selectedTenure",
+        "initialOptionID": "48-months",
+        "options": [
+          {
+            "id": "36-months",
+            "label": "36 months",
+            "emiText": "EMI ₹20,598/month",
+            "action": {
+              "type": "setSelection",
+              "selectionKey": "selectedTenure",
+              "optionID": "36-months"
+            }
+          },
+          {
+            "id": "48-months",
+            "label": "48 months",
+            "emiText": "EMI ₹16,008/month",
+            "action": {
+              "type": "setSelection",
+              "selectionKey": "selectedTenure",
+              "optionID": "48-months"
+            }
+          },
+          {
+            "id": "60-months",
+            "label": "60 months",
+            "emiText": "EMI ₹13,313/month",
+            "action": {
+              "type": "setSelection",
+              "selectionKey": "selectedTenure",
+              "optionID": "60-months"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
