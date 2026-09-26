@@ -1,52 +1,334 @@
-# CARS24 SDUI iOS Assignment
+# Cars24 SDUI Assignment
 
-This repository contains a deliberately scoped, native SwiftUI implementation of the CARS24 Server-Driven UI assignment.
+A native iOS implementation of a **Server-Driven UI (SDUI)** system built with SwiftUI.
 
-## Status
+> **Context**
+>
+> This project was completed as a technical assignment during an interview process with **Cars24**.
+>
+> It is an independent implementation created for evaluation purposes and is **not an official Cars24 product or production codebase**.
 
-Milestones 8 through 11 are complete: all seven declared V1 feed section types render as focused native SwiftUI views, and a release-only performance harness compares the static and SDUI execution paths. The typed vehicle rail, native finance sheet, and bounded JSON action flow remain the only interactive assignment flow. The highlighted service grid and promotional banner are static, accessible presentations of their validated payload data; no screenshot-only behaviour or new actions were added.
+The assignment focused on designing a flexible, type-safe UI system capable of rendering screens from JSON-defined components while maintaining predictable behavior, graceful fallbacks, and measurable performance.
 
-The `-static-baseline` launch mode renders the same canonical home content from a direct source-code snapshot. It bypasses the SDUI load, decode, registry, validation, renderer, and action paths, and intentionally presents the initial EMI as static text rather than providing a second finance flow.
+## Overview
 
-`Cars24SDUIPerformance` is a shared Release scheme containing opt-in UI performance tests. Its local simulator preflight validates the signposts and routes only; the written assignment's physical-device performance result remains pending while the connected iPhone is offline. See `PERF.md` for the exact capture procedure and reporting boundary.
+The project explores how a mobile application can move part of its UI definition from hardcoded client-side views to a server-driven schema.
 
-## Source of truth
+Instead of defining every screen directly in SwiftUI, the application consumes structured JSON and maps it to supported native components.
 
-The written assignment is authoritative. The supplied CARS24 iOS screenshots inform visual hierarchy, card language, spacing, and navigation context only. They do not add product requirements.
+The implementation focuses on:
 
-## Chosen scope
+- Type-safe SDUI models
+- JSON-driven rendering
+- Component validation
+- Graceful fallback handling
+- Action routing
+- Dependency injection
+- Swift Concurrency
+- Performance comparison against static SwiftUI
+- Deterministic fixtures for testing and benchmarking
 
-The target is a Cars24-style iOS home/discovery screen with:
+## Key Features
 
-- At least five visually distinct SDUI section types.
-- A horizontal content rail and a vertical service grid.
-- A vehicle card that displays an EMI value.
-- An assignment-required finance bottom sheet with a tenure selector that updates the displayed EMI through JSON-defined actions.
-- An explicit unsupported-component fallback.
+### Server-Driven UI
 
-The implementation intentionally excludes live APIs, authentication, search, profile, location selection, favourites, full tab navigation, pagination, remote image loading, and a second platform.
+- JSON-defined UI structure
+- Typed component models
+- Native SwiftUI rendering
+- Component-based rendering pipeline
+- Support for extensible UI definitions
 
-## Technical direction
+### Validation & Fallbacks
 
-| Decision | Rationale |
-|---|---|
-| SwiftUI on iOS 17+ | Modern Observation and structured concurrency keep the implementation compact and native. |
-| Local JSON fixture | The assignment permits it; it produces deterministic demos and fair performance measurements. |
-| Typed SDUI contract | Component capability, validation, and fallback behavior remain explicit and testable. |
-| Manual dependency injection | Dependencies remain visible and explainable without framework overhead. |
-| Native sheet | The required bottom sheet remains accessible and aligned with iOS behavior. |
-| Static baseline | A direct SwiftUI source snapshot provides the required performance control without exercising the SDUI execution path. |
+The renderer validates incoming component data before attempting to display it.
+
+Unsupported or invalid components fall back gracefully instead of breaking the entire screen.
+
+This helps make the SDUI layer more resilient to:
+
+- Unsupported component types
+- Missing properties
+- Invalid payloads
+- Schema mismatches
+- Unexpected server-side changes
+
+### Action Handling
+
+UI actions are represented through structured action models rather than being tightly coupled to individual views.
+
+This makes it easier to support actions such as:
+
+- Navigation
+- External links
+- Button interactions
+- Future server-defined behavior
+
+### Static UI Baseline
+
+The project includes a traditional static SwiftUI implementation of the same experience.
+
+This provides a baseline for comparing:
+
+- Rendering behavior
+- Complexity
+- Maintainability
+- Performance
+- Flexibility
+
+between static and server-driven approaches.
+
+### Performance Instrumentation
+
+The project includes instrumentation for comparing the SDUI and static implementations.
+
+The goal is not only to make the SDUI approach work, but also to understand the runtime cost introduced by:
+
+- JSON decoding
+- Model validation
+- Component mapping
+- Dynamic rendering
+
+## Architecture
+
+The project separates responsibilities across distinct layers.
+
+```text
+cars24-sdui-assignment/
+│
+├── App/
+│
+├── Models/
+│   ├── SDUI models
+│   ├── Component models
+│   └── Action models
+│
+├── Rendering/
+│   ├── Component renderer
+│   ├── Validation
+│   └── Fallback handling
+│
+├── Networking/
+│
+├── Services/
+│
+├── DependencyInjection/
+│
+├── StaticUI/
+│
+├── Performance/
+│
+├── Resources/
+│   └── JSON fixtures
+│
+├── Tests/
+│
+├── ARCHITECTURE.md
+└── README.md
+```
+
+## SDUI Flow
+
+At a high level, the application follows this flow:
+
+```text
+JSON Payload
+     ↓
+Decoding
+     ↓
+Typed SDUI Models
+     ↓
+Validation
+     ↓
+Component Renderer
+     ↓
+Native SwiftUI Views
+     ↓
+Action Handling
+```
+
+Invalid or unsupported components follow a fallback path:
+
+```text
+Component
+     ↓
+Validation
+     ↓
+Unsupported / Invalid
+     ↓
+Fallback UI
+```
+
+## Tech Stack
+
+- Swift
+- SwiftUI
+- Swift Concurrency
+- Codable
+- URLSession
+- Dependency Injection
+- XCTest
+- JSON-based SDUI schema
+- Performance instrumentation
+
+## Dependency Injection
+
+The project uses manual dependency injection rather than introducing a third-party DI framework.
+
+Dependencies are created and passed explicitly, helping keep the implementation:
+
+- Easy to reason about
+- Testable
+- Lightweight
+- Free from unnecessary framework coupling
+
+## JSON Fixtures
+
+Deterministic JSON fixtures are included in the project to make the behavior reproducible.
+
+These fixtures are useful for:
+
+- Testing supported components
+- Testing invalid components
+- Verifying fallback behavior
+- Performance benchmarking
+- Development without depending on a live backend
+
+## Performance Comparison
+
+One of the goals of the assignment was to compare the SDUI implementation with a traditional static SwiftUI screen.
+
+The comparison focuses on areas such as:
+
+- Initial rendering cost
+- JSON decoding overhead
+- Validation overhead
+- Rendering complexity
+- Maintainability trade-offs
+- Flexibility of server-controlled layouts
+
+The static implementation provides a useful baseline for evaluating the cost and benefits of introducing SDUI.
+
+## Design Decisions
+
+### Typed Models Over Dictionaries
+
+The implementation favors strongly typed models instead of passing arbitrary dictionaries throughout the rendering layer.
+
+This provides:
+
+- Compile-time safety
+- Easier debugging
+- Clear component contracts
+- Better maintainability
+- More predictable rendering behavior
+
+### Graceful Failure
+
+A single unsupported component should not prevent an entire screen from rendering.
+
+For this reason, unsupported or malformed components are handled through explicit fallback behavior.
+
+### Native Rendering
+
+Although the screen definition is server-driven, the rendered components remain native SwiftUI views.
+
+This allows the application to retain:
+
+- Native performance
+- Accessibility
+- Platform behavior
+- SwiftUI composition
+- Type-safe client-side implementation
+
+## Running the Project
+
+Clone the repository:
+
+```bash
+git clone https://github.com/himanshu240601/cars24-sdui-assignment.git
+cd cars24-sdui-assignment
+```
+
+Open the Xcode project:
+
+```bash
+open *.xcodeproj
+```
+
+Select an iOS simulator or physical device and run the application.
+
+The included JSON fixtures allow the project to be explored without requiring a live backend.
 
 ## Documentation
 
-- Documentation/ARCHITECTURE.md - system boundaries and engineering decisions.
-- Documentation/SDUI_SCHEMA_V1.md - proposed contract and compatibility policy.
-- Documentation/FIXTURE_PLAN.md - planned deterministic payloads and demo cases.
-- Documentation/PROJECT_FOUNDATION.md - Xcode target, language, and launch-mode decisions.
-- Documentation/AI_CONTEXT.md - constraints governing AI-assisted work.
-- AI_WORKFLOW.md - contemporaneous AI evidence log and verification strategy.
-- PERF.md - Release benchmark protocol, metric boundaries, and physical-device result table.
+The repository also contains additional documentation covering the implementation in more detail.
 
-## Milestone policy
+### Architecture
 
-Each milestone is reviewed before the next begins. Milestone 11 adds a repeatable Release-build measurement protocol for the two completed render paths without altering the SDUI contract or product scope. Its physical-device capture remains an external submission step because the connected iPhone is currently offline.
+See:
+
+```text
+ARCHITECTURE.md
+```
+
+for architectural decisions and component relationships.
+
+### SDUI Schema
+
+The project includes documentation and examples describing the JSON structure consumed by the renderer.
+
+### Performance
+
+Performance-related documentation and instrumentation explain how the static and SDUI implementations were compared.
+
+## What I Focused On
+
+While working on this assignment, I focused on:
+
+- Designing a typed SDUI contract
+- Keeping rendering logic extensible
+- Handling malformed server data safely
+- Separating rendering from action handling
+- Using structured concurrency
+- Keeping dependencies explicit
+- Comparing dynamic and static rendering approaches
+- Making the implementation easy to inspect and evaluate
+- Documenting architectural decisions and trade-offs
+
+## Out of Scope
+
+The project intentionally focuses on the SDUI architecture rather than recreating a complete production application.
+
+Areas such as the following were intentionally kept outside the core scope:
+
+- Production backend infrastructure
+- Complete Cars24 application functionality
+- Production analytics
+- Authentication
+- Full design-system coverage
+- Remote feature management
+- Production monitoring
+
+## Project Status
+
+This repository represents the completed technical assignment and is not under active product development.
+
+It is preserved as a portfolio project demonstrating my approach to iOS architecture, SwiftUI, Server-Driven UI, validation, performance, and engineering trade-offs.
+
+## Disclaimer
+
+This repository was created independently as part of a technical interview assignment.
+
+Cars24 trademarks, branding, and referenced product concepts belong to their respective owners.
+
+This repository is **not affiliated with, endorsed by, or maintained by Cars24**, and it should not be considered representative of Cars24's production architecture or internal systems.
+
+## Author
+
+**Himanshu Goyal**
+
+GitHub: [@himanshu240601](https://github.com/himanshu240601)
+
+## License
+
+No open-source license is currently specified for this repository.
